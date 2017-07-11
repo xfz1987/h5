@@ -1,0 +1,246 @@
+一、概述
+
+   1.HTML5新特性中最重要内容的之一，比较完善，应用广泛
+   2.指的是画布，类似于windows的画图工具；在HTML中，默认效果与div类似，背景色是默认色
+   3.配合js,动态效果非常帅
+   4.2D图像效果、3D图像效果
+   5.注意:IE8及之前版本不支持canvas
+   6.使用:
+      1.html: <canvas id="drawing" width="200" height="200">A drawing of something</canvas>
+              [A drawing of something是后备信息，如果浏览器不支持canvas，就会显示这些信息]
+      2.js: var cav = document.querySelector("#drawing");
+            if(cav.getContext){
+		var context = cav.getContext("2d");
+		 使用 API 达到预期效果
+	    }
+       注意:1.2d中的d只能小写,并且为字符串
+            2.使用canvas来绘制的图像，只能出现在canvas规定的范围内，如果超出则会被隐藏
+
+
+二、绘图
+
+   1.绘制图形
+     canvas 只支持一种基本形状――矩形，所以其它形状都是有一个或多个路径组合而成。
+            还好，有一组路径绘制函数让我们可以绘制相当复杂的形状。
+
+     原点:canvas的左上角(0,0)
+
+     fillRect(x,y,width,height) : 绘制一个实心矩形，默认背景颜色为黑色，没有边框
+     strokeRect(x,y,width,height) : 空心矩形，默认边框颜色为黑色，边框默认宽:1px
+     clearRect(x,y,width,height) : 以矩形方式清除指定区域（类似橡皮擦） 放置在要清除的图形位置之后，即绘制一个，清除一下
+     [x 和 y 指定矩形左上角(相对于原点)的位置]
+
+     填充(实心)配合fillRect()，并在fillRect()之前使用
+     fillStyle = "颜色值";
+
+     描边(空心)配合strokeRect()，并在strokeRect()之前使用
+     strokeStyle = "颜色值";
+
+     全局设置透明度（0~1）在颜色后设置透明度
+     globalAlpha = "透明值";
+
+     /*globalCompositeOperation = type 属性-->
+      * source-over: 新图形在原有图形上面，覆盖（默认）
+      * source-atop : 绘制原有图层被新图层覆盖的部分和新图层其它部分
+      * source-in : 只绘制新图形与原图形重合的部分，其他部分透明
+      * source-out: 只绘制新图形与与原图不重合的部分，重合部分透明
+
+      * destination-atop:
+      * destination-in:
+      * destination-out:
+      * destination-over:
+      * lighter:重叠部分颜色加深
+      * copy:
+      * xor:只绘制重叠部分
+    */
+
+     ****注意顺序****
+
+     function draw(){
+	var canvas = document.getElementById('tutorial');
+	if (canvas.getContext){
+	    var ctx = canvas.getContext('2d');
+	   ctx.fillRect(25,25,100,100);
+	   ctx.clearRect(45,45,60,60);
+	   ctx.strokeRect(50,50,50,50);
+	}
+     }
+
+   2.绘制渐变
+
+     ①线性渐变：两点一线（渐变的基准线）
+       createLinearGradient(x1,y1,x2,y2);
+     ②圆形渐变：x1,y1:表示第一个圆的圆心，r1:表示第一个圆的半径，圆柱体或圆锥体基准线
+       createRadialGradient(x1,y1,r1,x2,y2,r2);
+
+     添加的颜色到哪里结束（postion:0~1，0表示基准线的起点，1代表基准线的终点）
+       addColorStop(position,color);
+
+   3..绘制路径
+     ①用 beginPath() 创建一个路径。在内存里，路径是以一组子路径（直线，弧线等）的形式储存的，
+       它们共同构成一个图形。每次调用 beginPath，子路径组都会被重置，然后可以绘制新的图形。
+     ②就是实际绘制路径的部分，很快我们就会看到。
+     ③调用 closePath 方法，它会尝试用直线连接当前端点与起始端点来关闭路径，
+       但如果图形已经关闭或者只有一个点，它会什么都不做。这一步不是必须的。
+     ④调用 stroke 或 fill 方法，这时，图形才是实际的绘制到 canvas 上去。
+       stroke()绘制路径的轮廓
+       fill()绘制路径的填充
+
+       clip()在上下文中设置裁剪区域（注意:再绘制图像，只能在该区域中）
+
+
+     注意：当调用 fill 时，开放的路径会自动闭合，而无须调用 closePath 。
+
+    【创建形状方法】
+    创建矩形
+    rect(x,y,width,height)：
+
+    创建圆形
+    arc(x,y,radius,startAngle,endAngle,direction):
+      以(x,y)为圆心绘制一条弧线，弧线半径为radius，起始角度和结束角度(用弧度表示 [角度 * Math.PI/2])，
+      （0右  Math.PI/2下  Math.PI左  Math.PI*3/2上  Math.PI*2一圈）
+      最后一个参数表示startAngle和endAngle是否按逆时针方向计算（false表示顺时针） 默认是顺时针
+
+    【设置路径】
+    moveTo(x,y)：将当前坐标移动到指定坐标（就是起点）
+    lineTo(x,y): 将当前坐标到指定坐标绘制一条新线（就是终点）
+
+    设置线形:
+     lineWidth:设置线的宽度，默认为1
+     lineCap:设置线端点的形状
+          butt:默认:平行的
+	  round:圆
+	  square:正方形，与butt效果一致
+
+      lineJoin:设置两条线连接点的形状
+          round:圆角
+	  bevel:斜角
+	  miter:默认，尖角
+      miterLimit:设置线条交接点的延伸范围（0~5:5最大，尖角；0平角）
+         与lineJoin配合使用
+	 仅当lineJoin="miter"时有效
+
+    4.绘制文字
+      font:与css使用相同
+      textAlign:设置水平位置
+           left、right、center
+	   start 效果与left相同
+	   end   效果与right相同
+      textBaseline:设置垂直位置
+           top、bottom、middle
+	   hanging：悬挂基线
+	   alphabetic:字母基线
+
+      strokeText(text,x,y);绘制指定文字的轮廓
+      fillText(text,x,y);绘制指定文字的填充
+
+   5.绘制阴影
+     shadowColor:设置阴影颜色，默认为黑色
+     shadowOffsetX：表示当前阴影为水平效果，值为数字（+阴影在右，-阴影在左边）
+     shadowOffsetY:表示当前阴影为垂直效果，值为数字(+阴影在下，-阴影在上边）
+     shadowBlur:设置当前阴影效果，值为数字（值越大，越模糊 ,最小值为0）
+
+三、图像
+   1.绘制图像
+     drawImage(image,x,y):将独立的图片绘制在画布中（注意: 图片加载完毕后才能使用canvas进行绘制）
+        参数x,y：canvas上的坐标
+	      image = new Image();
+        image.src = "图片地址";
+		    image.onload = function(){
+			     context.drawImage(image,0,0);
+		    }
+
+     drawImage(image,x,y,width,height):
+       width,height:是设置引入图片的高度和宽度，可以进行缩放处理
+
+     drawImage(image,sx,sy,sw,sh,dx,dy,dw,dh);
+      - 规定要使用的图像，
+      - (可选)开始剪切的 x 坐标位置,
+      - (可选)开始剪切的 y 坐标位置,
+      - (可选)被剪切图像的宽度。
+      - (可选)被剪切图像的高度,
+      - 在画布上放置图像的 x 坐标位置,
+      - 在画布上放置图像的 y 坐标位置,
+      - (可选,伸展或缩小图像)要使用的图像的宽度，
+      - (可选,伸展或缩小图像)要使用的图像的高度
+
+   2.平铺
+     createPattern(image,type):并不表示绘制图片，设置要载入的图片是否平铺，所以需要用绘制的方法进行绘制
+     参数type:表示是否平铺
+        no-repeate
+	      repeat
+	      repeat-x
+	      repeat-y
+
+		var image = new Image();
+		image.src = "1.png";
+		image.onload = function(){
+			var rpt = canvas.createPattern(image,"repeat");
+			canvas.fillStyle = rpt;
+			canvas.fillRect(0,0,drawing.width,drawing.height);
+		}
+
+   3.切割图像
+     ①载入图像:drawImage()或createPattern()
+     ②切割:clip()
+        canvas.beginPath();
+	      canvas.arc(200,200,100,0,Math.PI*2);
+	      canvas.stroke();
+	      canvas.clip();
+
+  4.离屏canvas
+    将第二个canvas中的内容加载到第一个canvas上
+    实例1:为图片增加增加一个水印
+    原理:
+        1.为水印单独设置一个canvas2，
+        2.然后使用ctx1.drawImage(canvas2,x,y)-xy表示c2在c1上的位置
+
+    实例2:为一个图片增加放大镜效果
+
+  5.获取图像像素
+    imageDate = context.getImageData(x,y,w,h);
+    矩形区域的图像相关信息 imageDate
+
+    imageDate对象: width、height、data
+
+  6.将图像信息放回到canvas中
+    context.putImageData(imageData,dx,dy,dirtyX,dirtyY,dirtyW,dirtyH)
+    - imageData 图像信息 一维数组
+    - dx、dy 将imageData放在画布中的位置
+    - dirtyX,如果设置值了，它会累加到dx上
+    - dirtyY,如果设置值了，它会累加到dy上
+
+  7.创建imageData
+    context.createImageData(w,h)
+
+四、画布方法
+   1.状态方法:
+	save():保存当前Canvas设置
+	restore():还原设置
+
+   2.转换方法:
+	   scale(宽的倍数,高的倍数):设置放大或缩小，应放在绘制之前
+	   translate(x,y);重新映射画布的原点位置（效果就是图像移动位置）,应放在绘制之前
+     rotate(要旋转的度数*Math.PI/180):以画布的原点旋转图像，应放在绘制之前
+
+
+五.路径方向
+   非零环绕规则
+
+
+六.交互
+  ctx.isPointInPath(x,y);//判断该坐标是否在当前绘制的路径内
+  利用这个函数可以实现canvas的交互性
+
+  var bounding = canvas.getBoundingClientRect() || getClientRect();
+  var x = e.clientX - bounding.left
+  var y = e.clientY - bounding.top;
+
+  getBoundingClientRect获取元素位置。用于获得页面中某个元素的左，上，右和下分别相对浏览器视窗的位置。
+  getBoundingClientRect是DOM元素到浏览器可视范围的距离（不包含文档卷起的部分）。
+  该函数返回一个Object对象，该对象有6个属性：top,lef,right,bottom,width,height；
+  这里的top、left和css中的理解很相似，
+  width、height是元素自身的宽高，
+  但是right是指元素右边界距窗口最左边的距离，
+  bottom是指元素下边界距窗口最上面的距离。
+

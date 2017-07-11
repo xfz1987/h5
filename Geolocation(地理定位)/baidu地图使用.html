@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		
+		<title>百度地图的使用</title>
+		<script src="http://api.map.baidu.com/api?v=2.0&ak=HbUVYMUg6PwbOnXkztdgSQlQ"></script>
+		<style type="text/css">
+			body,html,#allmap {
+				width : 100%;
+				height : 100%;
+				font-family : "微软雅黑";
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 
+			1、在当前HTML页面中引入百度地图并显示
+			 a)在当前HTML页面中引入百度地图js文件并设置你的秘钥
+			    <script src="http://api.map.baidu.com/api?v=2.0&ak=HbUVYMUg6PwbOnXkztdgSQlQ"></script>
+			 b)在当前HTML页面创建容器用于显示百度地图
+				<div id="allmap"></div>
+			 c)利用百度地图的核心类Map()创建地图对象
+			 d)使用Map对象的centerAndZoom()方法设置地图显示的中心城市及显示级别
+			2、在百度地图中获取当前位置
+			 a)通过构造函数方式得到Geolocation对象(用于获取用户当前的位置)
+			 b)调用getCurrentPosition()方法获取用户当前的位置
+			3、将"中鼎大厦"在百度地图中进行标注
+			 a)使用Marker对象向地图进行标注
+			 b)利用Map对象的addOverlay()将Marker对象添加到百度地图中
+			 c)利用Map对象的panTo()将当前位置设置为地图的中心位置
+			4、鼠标在百度地图中点击目标位置时，显示介绍性信息
+			 a)定义介绍性信息(格式{key:value})
+			 b)通过构造函数创建InfoWindow对象，该对象用于封装提示信息
+			 c)利用Marker对象绑定click事件，处理函数中调用openInfoWindow()方法
+		-->
+		
+		<div id="allmap"></div>
+		<script>
+			window.onload = function(){
+				
+				// 1 创建地图对象，得到百度地图，并显示在div中
+				var map = new BMap.Map("allmap");
+				// 2 设置百度地图的中心城市和显示级别
+				// centerAndZoom(设置中心城市,显示级别)
+				// * 设置中心城市：
+				//   * 直接设置城市的名称,例如"北京市"
+				//   * 设置城市的经度和纬度 
+				map.centerAndZoom("北京市",12);
+				// 增加比例尺
+				map.addControl(new BMap.ScaleControl());
+				map.enableScrollWheelZoom();
+				// 3 使用构造函数得到Geolocation对象
+				var geolocation = new BMap.Geolocation();
+				// 4 使用getCurrentPosition()方法，当前位置信息被封装在回调函数的参数中
+				geolocation.getCurrentPosition(function(position){
+					// position：表示已经获取到位置信息
+					// position.point：point中封装了经度和纬度的信息
+					// 经度
+					var lng = position.point.lng;
+					// 纬度
+					var lat = position.point.lat;
+					console.log("你的经度为："+lng+",纬度为："+lat);
+
+					// 5 创建Marker对象
+					var marker = new BMap.Marker(position.point);
+					// 6 将Marker对象通过addOverlay()方法添加到Map对象上
+					map.addOverlay(marker);
+					// 7 将地图的中心点移动到标注的位置
+					map.panTo(position.point);
+
+					// 因为PC浏览器定位不准确,给地址转换成经纬度，然后再标注
+					// 1 获取定位(中鼎大厦)
+					var coder = new BMap.Geocoder();
+					// 2 调用getPoint()方法获取经纬度
+					coder.getPoint("中鼎大厦",function(point){
+						var newMarker = new BMap.Marker(point);
+						map.addOverlay(newMarker);
+						map.centerAndZoom(point,16);
+
+						// 定义介绍信息
+						var opts = {
+							width : 200,
+							height : 100,
+							title : "达内职业培训"
+						}
+						// 创建infoWidnow对象
+						var infoWindow = new BMap.InfoWindow("地址：北京市北三环西路18号中鼎大厦B座7层",opts);
+						// 为Marker对象绑定click事件
+						newMarker.addEventListener("click",function(){
+							map.openInfoWindow(infoWindow,point);
+						});
+
+					});
+				});
+			}
+		</script>
+	</body>
+</html>

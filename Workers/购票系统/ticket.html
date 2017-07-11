@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>购票</title>
+		<style>
+			.window{width:100px;height:100px;border:1px solid black;float:left;margin-right:10px;}
+			.hasTicket{background:green;}
+			.noTicket{background:red;}
+			#controlbar{padding:30px 0px 10px 450px;}
+			button{width:100px;height:30px;}
+			.clear{clear:both;}
+		</style>
+	</head>
+	<body>
+		<h1 align="center">模拟购票系统</h1>
+		<hr size="1" color="red"/>
+		
+		<!--购票窗口-->
+		<div id="windows">
+			<div id="w0" class="window" onclick="buy(0)"></div>
+			<div id="w1" class="window" onclick="buy(1)"></div>
+			<div id="w2" class="window" onclick="buy(2)"></div>
+			<div id="w3" class="window" onclick="buy(3)"></div>
+			<div id="w4" class="window" onclick="buy(4)"></div>
+			<div class="clear"></div>
+		</div>
+		<div id="controlbar">
+			<button onclick="refresh()">刷票</button>
+		</div>	
+
+		<script>			
+			if(typeof(Worker) !== undefined){
+				for(var i=0,workers=[],worker;i<5;i++){
+					worker = new Worker("ticket.js")
+					worker.addEventListener("message",myMessage,false);
+					workers.push(worker);
+				}				
+			}else{
+				alert("IE浏览器已死，请更换其它浏览器!");
+			}
+
+		    function refresh(){
+				for(var i=0,len=workers.length;i<len;workers[i].postMessage("refresh"),i++);
+			}
+			
+			function myMessage(e){
+				var index = workers.indexOf(e.target);
+				switch(e.data){
+					case 0:
+						document.getElementById("w"+index).className += " noTicket";
+						break;
+					case 1:
+						document.getElementById("w"+index).className += " hasTicket";
+						break;
+					case 3:
+						alert("恭喜你，抢到票了!");
+						break;
+					case 4:
+						alert("很遗憾，票已抢光!");
+						break;
+				}
+			}
+
+			function buy(index){
+				var div = document.getElementById("w"+index);
+				if(div.className.indexOf("hasTicket") != -1){
+					workers[index].postMessage("buy");
+				}else{
+					alert("票已售完!");
+				}		
+			}
+
+		</script>
+	</body>
+</html>

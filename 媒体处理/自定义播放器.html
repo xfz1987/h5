@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>XXX</title>
+		<style>
+			#adv{display:none;position:absolute;top:60px}
+		</style>
+	</head>
+
+	<body>
+		<div id="mediaPlayer">
+			<div id="video">
+				<video id="player" width="320" height="280" src="source/video.mp4" poster="source/test.jpg">
+					Video player not avaliable.
+				</video>
+			</div>
+			<div id="controls">
+				<input type="button" value="播放" id="btn"/>
+				<span id="curtime">0</span>/<span id="duration">0</span>
+			</div>
+		</div>
+			
+		<script>
+			var player = document.querySelector("#player"),
+			    btn = document.querySelector("#btn"),
+				curtime = document.querySelector("#curtime"),
+				duration = document.querySelector("#duration");
+
+			window.onload = function(){
+				duration.innerHTML = player.duration;
+			}
+
+	        btn.addEventListener("click",onPlay,false);
+			function onPlay(){
+				if(player.paused){
+					player.play();
+					btn.value = "暂停";
+				}else{
+					player.pause();
+					btn.value = "播放";
+				}
+			}
+			
+			setInterval(function(){
+				curtime.innerHTML = player.currentTime;
+			},1000);
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,78 @@
+@charset 'utf-8';
+body {
+  overflow-x: hidden;
+}
+#canvas {
+  display: block;
+  margin: 0 auto;
+}
+#controller {
+  width: 100%;
+  padding: 10px;
+  margin: 0 auto;
+}
+#controller .op_btn {
+  float: right;
+  margin: 10px 0 0 10px;
+  border: 2px solid #aaa;
+  width: 40px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 14px;
+  text-align: center;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  backgroud: #fff;
+  font-weight: bold;
+  font-family: Miscrosoft Yahei,Arial;
+  *zoom: 1;
+  margin-right: 3%;
+}
+#controller .op_btn:before,
+#controller .op_btn:after {
+  display: table;
+  content: "";
+}
+#controller .op_btn:after {
+  clear: both;
+}
+#controller .op_btn:hover {
+  background: #def;
+}
+#controller .color_btn {
+  float: left;
+  margin: 10px 10px 0 0;
+  border: 5px solid #fff;
+  width: 20px;
+  height: 20px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#controller .color_btn:hover {
+  border: 5px solid violet;
+}
+#controller .color_btn_selected {
+  border: 5px solid blueviolet;
+}
+#controller #black_btn {
+  background: black;
+}
+#controller #blue_btn {
+  background: blue;
+}
+#controller #green_btn {
+  background: green;
+}
+#controller #red_btn {
+  background: red;
+}
+#controller #orange_btn {
+  background: orange;
+}
+#controller #yellow_btn {
+  background: yellow;
+}

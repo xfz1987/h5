@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>学写一个字</title>
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+    <canvas id="canvas">该浏览器不支持canvas</canvas>
+    <div id="controller">
+        <div id="black_btn" class="color_btn color_btn_selected"></div>
+        <div id="blue_btn" class="color_btn"></div>
+        <div id="green_btn" class="color_btn"></div>
+        <div id="red_btn" class="color_btn"></div>
+        <div id="orange_btn" class="color_btn"></div>
+        <div id="yellow_btn" class="color_btn"></div>
+        <div id="clear_btn" class="op_btn">清 除</div>
+    </div>
+
+    <script src="js/jquery.js"></script>
+    <script src="js/handwrite.js"></script>
+    <script>
+        var hand = Handwrite.init($('#canvas'));
+        $('#clear_btn').on('click',function(){
+            hand.clear();
+        });
+        $('.color_btn').on('click',function(){
+            $(this).addClass('color_btn_selected').siblings().removeClass('color_btn_selected');
+            hand.selColor($(this).css('backgroundColor'));
+        });
+    </script>
+</body>
+</html>

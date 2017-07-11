@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>使用离屏技术实现放大镜效果</title>
+</head>
+<body>
+    <canvas id="canvas" style="display:block;margin:0 auto;border:1px solid #aaa;">您的浏览器尚不支持canvas</canvas>
+    <script>
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+        var image = new Image();
+        var isMouseDown = false;
+        var scale;
+
+        //创建放大镜的canvas
+        var offCanvas = document.createElement('canvas');
+        offCanvas.style.display = 'none';
+        document.body.appendChild(offCanvas);
+        offctx = offCanvas.getContext('2d');
+
+        window.onload = function(){
+            canvas.width = 1152;
+            canvas.height = 768;
+            image.src = 'img-lg.jpg';
+            image.onload = function(){
+                offCanvas.width = image.width;
+                offCanvas.height = image.height;
+                scale = offCanvas.width/canvas.width;
+
+                ctx.drawImage(image,0,0,canvas.width,canvas.height);//缩小一下图片
+                offctx.drawImage(image,0,0);
+            };
+        };
+
+        function windowToCanvas(x,y){
+            var box = canvas.getBoundingClientRect() || canvas.getClientRect();
+            return {x:x-box.left,y:y-box.top};
+        }
+
+        function drawCanvasWithMaginfier(isShow,loc){
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.drawImage(image,0,0,canvas.width,canvas.height);
+            isShow && drawMaginfier(loc);
+        }
+
+        function drawMaginfier(loc){
+            //计算放大时，目标的位置
+            var x = loc.x * scale;
+            var y = loc.y * scale;
+
+            var r = 200;
+            
+            //从离屏canvas上剪辑出一个圆
+            ctx.save();
+            ctx.beginPath();
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = '#069';
+            ctx.arc(loc.x,loc.y,r,0,2*Math.PI);
+            ctx.stroke();
+            ctx.clip();
+
+            ctx.drawImage(offCanvas,x-r,y-r,2*r,2*r,loc.x-r,loc.y-r,2*r,2*r);
+            ctx.restore();
+        }
+
+        canvas.onmousedown = function(e){
+            e.preventDefault();
+            isMouseDown = true;
+            var loc = windowToCanvas(e.clientX,e.clientY);
+            drawCanvasWithMaginfier(true,loc);
+        };
+
+        canvas.onmousemove = function(e){
+            e.preventDefault();
+            if(isMouseDown){
+                var loc = windowToCanvas(e.clientX,e.clientY);
+                drawCanvasWithMaginfier(true,loc);
+            }
+        };
+
+        canvas.onmouseup = function(e){
+            e.preventDefault();
+            isMouseDown = false;
+            drawCanvasWithMaginfier(false);
+        };
+
+        canvas.onmouseout = function(e){
+            e.preventDefault();
+            isMouseDown = false;
+            drawCanvasWithMaginfier(false);
+        };
+
+    </script>
+</body>
+</html>

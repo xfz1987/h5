@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>螺旋图</title>
+	</head>
+
+	<body>
+		<canvas id="drawing" width="300" height="300" style="background:gray;">A drawing of something</canvas>
+		<button onclick="start()">开始</button>
+		<script>
+			var timer = null,
+			    times = 100,
+				x = 20,
+				y = 10;
+			function start(){
+				var drawing = document.querySelector("#drawing");
+				if(drawing.getContext){
+					var canvas = drawing.getContext("2d");
+					canvas.fillStyle = "rgba(45,175,233,0.25)";
+					canvas.translate(150,20);
+					canvas.fillRect(0,0,100,50);
+
+					timer = setInterval(function(){
+						times--;
+						canvas.translate(++x,++y);
+						canvas.scale(0.95,0.95);
+						canvas.rotate(Math.PI/10);
+						canvas.fillRect(0,0,100,50);
+						if(times == 0){
+							clearInterval(timer);
+							timer = null;
+						}
+					},100);
+				}
+			}
+
+		</script>
+
+	</body>
+</html>

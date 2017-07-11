@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<button id="check">检查浏览器是否支持websql</button>
+	<button id="open">打开及创建数据库</button>
+	<button id="table">创建表</button>
+	<button id="insert">新增数据</button>
+	<button id="query">查询</button>
+	<button id="delete">删除数据</button>
+	<button id="update">更新数据</button>
+	<button id="drop">删除表</button>
+	
+	<script src="websql.js"></script>
+	<script>
+		function $(id){
+			return document.getElementById(id);
+		}
+
+		//检查浏览器是否支持indexDB
+		$('check').onclick = function(){
+			alert(window.openDatabase ? '支持' : '不支持');
+		};
+
+		var DB;
+
+		//打开及创建数据库
+		$('open').onclick = function(){
+			// var websql = new WebSql({
+			// 	dbname: 'my_test',
+			// 	version: '1.0',
+			// 	desc: '我的测试库',
+			// 	size: 20*1024
+			// });
+			// var DB = websql.openDB(function(){
+			// 	alert('数据库创建、连接成功');
+			// })
+			
+			DB = WebSql({
+				dbname: 'my_test',
+				version: '1.0',
+				desc: '我的测试库',
+				size: 20*1024
+			}).openDB(function(){
+				alert('数据库创建、连接成功');
+			});
+		};
+
+		//创建表
+		$('table').onclick = function(){
+			//创建user表，字段支持类型 TEXT、NUMBER，对于前端而言，直接使用TEXT类型更加方便，REAL UNIQUE表示字段值不能重复，是唯一的
+			DB.exeSql('CREATE TABLE IF NOT EXISTS user (userId TEXT REAL UNIQUE, name TEXT, deptId TEXT)',[],function(res){
+				alert('创建user表' + (res ? '成功': '失败'));
+			});
+			DB.exeSql('CREATE TABLE IF NOT EXISTS dept (deptId TEXT REAL UNIQUE, name TEXT)',[],function(res){
+				alert('创建dept表' + (res ? '成功': '失败'));
+			});
+		};
+
+		//新增数据
+		$('insert').onclick = function(){
+			var users = [
+				{userId:'110',name:'gzf',deptId:'A001'},
+				{userId:'114',name:'yh',deptId:'B001'},
+				{userId:'115',name:'nlh',deptId:'C001'},
+				{userId:'116',name:'nlh',deptId:'C001'},
+				{userId:'117',name:'zc',deptId:'A001'}
+			];
+			var depts = [
+				{deptId:'A001',name:'产品研发中心'},
+				{deptId:'B001',name:'实施部'},
+				{deptId:'C001',name:'销售部'}
+			];
+			for(var i=0,len=users.length;i<len;i++){
+				var user = users[i];
+				DB.exeSql('INSERT INTO user (userId, name, deptId) VALUES(?, ?, ?)',[user.userId, user.name, user.deptId], function(res){
+                	console.log(res);
+                });
+			}
+			for(var j=0,lenj=depts.length;j<lenj;j++){
+				var dept = depts[j];
+				DB.exeSql('INSERT INTO dept (deptId, name) VALUES(?, ?)',[dept.deptId, dept.name], function(res){
+                	console.log(res);
+                });
+			}
+		};
+
+		//查询
+		$('query').onclick = function(){
+			//如果没有查到则返回[], 查到返回一个数组
+			
+			//单独查user表并且按userId降序查询，order by xxx, 以某个字段升序排序，加DES,表示降序排列
+			// DB.query('SELECT * FROM user ORDER BY userId DESC', [], function(res){
+			// 	console.log(res);
+			// 	var deptId = res.filter(function(item){
+			// 		return item.userId === '115';
+			// 	})[0].deptId;
+
+			// 	DB.query('SELECT * FROM dept WHERE deptId = ?', [deptId], function(deptInfo){
+			// 		console.log(deptInfo);
+			// 	});
+			// });
+
+			// //单独查询user，userId为110的信息记录
+			// DB.query('SELECT * FROM user WHERE userId = ?', ['110'], function(res){
+			// 	console.log(res);
+			// });
+
+			// //查询user,姓名为gzf，部门好为A001的人
+			// DB.query('SELECT * FROM user WHERE name = ? AND deptId = ?', ['gzf', 'A001'], function(res){
+			// 	console.log(res);
+			// });
+
+			//查询userId为110的用户所在的部门信息
+			DB.query('SELECT u.name username,t.name deptname FROM user u JOIN dept t ON t.deptId = u.deptId WHERE u.userId = ?', ['110'], function(res){
+				console.log(res);
+			});
+
+			//查询产品研发中心下的所有员工姓名
+			DB.query('SELECT u.name FROM user u JOIN dept t ON t.deptId = u.deptId WHERE t.name = ? ', ['产品研发中心'], function(res){
+				console.log(res);
+			});
+			
+		};
+
+		//删除数据
+		$('delete').onclick = function(){
+			DB.exeSql('DELETE FROM user where name = ? AND deptId = ?',['nlh', 'C001'], function(res){
+              	alert('删除[销售部]里面姓名为[nlh]的用户:'+ (res ? '成功' : '失败'));
+            });
+
+			//清空user表数据
+            // DB.exeSql('DELETE FROM dept',[], function(res){
+            //   	alert(res ? '成功' : '失败');
+            // });
+		};
+
+		//更新数据
+		$('update').onclick = function(){
+			//更改userId为117的用户姓名为zhangc
+			DB.exeSql('UPDATE user SET name = ? WHERE userId = ?', ['zhangc', '117'], function(res){
+				console.log(res);
+			});
+			//将userId为117的用户调岗至实施部
+			DB.exeSql('UPDATE user SET deptId = (SELECT deptId FROM dept WHERE name = ?) WHERE userId = ?', ['实施部', '117'], function(res){
+				console.log(res);
+			});
+		};
+
+		//删除数据表
+		$('drop').onclick = function(){
+			DB.dropTable('dept');
+		};
+
+	</script>
+</body>
+</html>

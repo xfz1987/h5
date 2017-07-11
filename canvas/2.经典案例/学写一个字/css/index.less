@@ -1,0 +1,70 @@
+@import url(common.less);
+body{overflow-x:hidden;}
+#canvas{
+    display:block;
+    margin:0 auto;
+}
+
+#controller{
+    .w100();
+    padding:10px;
+    margin:0 auto;
+
+    .op_btn{
+        .fr();
+        margin:10px 0 0 10px;
+        border:2px solid #aaa;
+        width:40px;
+        height:20px;
+        line-height:20px;
+        font-size:14px;
+        .tc();
+        .radius(5px);
+        cursor:pointer;
+        backgroud:#fff;
+        font-weight:bold;
+        font-family: Miscrosoft Yahei,Arial;
+        .clearfix();
+        margin-right:3%;
+        &:hover{
+            background:#def;
+        }
+    }
+
+    .color_btn{
+        float:left;
+        margin:10px 10px 0 0;
+        border:5px solid #fff;
+        width:20px;
+        height:20px;
+        .radius(5px);
+        cursor:pointer;
+
+        &:hover{
+            border:5px solid violet;
+        }
+    }
+
+    .color_btn_selected{
+        border:5px solid blueviolet;
+    }
+    #black_btn{
+        background:black;
+    }
+    #blue_btn{
+        background:blue;
+    }
+    #green_btn{
+        background:green;
+    }
+    #red_btn{
+        background:red;
+    }
+    #orange_btn{
+        background:orange;
+    }
+    #yellow_btn{
+        background:yellow;
+    }
+}
+

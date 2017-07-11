@@ -1,0 +1,270 @@
+@import url(common.less);
+html,body,div{margin:0;padding:0;}
+body{background:#ccc;}
+h1{
+    .tc();
+    color:#1A3F06;
+}
+@bg-col:#e1e1e1;
+.a-cm(){
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    margin:auto;
+}
+.football-pitch{
+    width:1000px;
+    height:500px;
+    .pos(r);
+    margin:40px auto;
+    background:url(turf.jpeg) repeat;
+    overflow:hidden;
+    border:4px solid @bg-col;
+
+    .lines{
+        opacity:0;
+        filter:alpha(opacity=0);
+        .transition(all 1.2s ease-in-out);
+
+        .halfway-line{
+            width:4px;
+            height:500px;
+            background:@bg-col;
+            .pos(a);
+            .a-cm();
+        }
+        .center-circle{
+            .pos(a);
+            width:100px;
+            height:100px;
+            .a-cm();
+            border:4px solid @bg-col;
+            .radius(50%);
+        }
+        .center-spot{
+            width:10px;
+            height:10px;
+            background:#fff;
+            .pos(a);
+            .a-cm();
+            .radius(50%);
+        }
+        .penalty-arc{
+            width:100px;
+            height:100px;
+            border:4px solid transparent;
+            .radius(50%);
+            .pos(a);
+            top:0;bottom:0;
+            margin-top:auto;
+            margin-bottom:auto;
+        }
+        .penalty-arc-left{
+            border-right-color:@bg-col;
+            left:52px;
+        }
+
+        .penalty-area{
+            width:140px;
+            height:300px;
+            border:4px solid @bg-col;
+            .pos(a);
+
+        }
+        .penalty-area-left{
+            left:-4px;
+            top:96px;
+        }
+
+        .penalty-spot{
+            width:10px;
+            height:10px;
+            background:@bg-col;
+            border:4px solid @bg-col;
+            .radius(50%);
+            .pos(a);
+        }
+        .penalty-spot-left{
+            left:91px;
+            top:245px;
+        }
+        .goal-area{
+            width:60px;
+            height:100px;
+            border:4px solid @bg-col;
+            .pos(a);
+        }
+        .goal-area-left{
+            left:-4px;
+            top:196px;
+        }
+        .corner-area{
+            width:16px;
+            height:16px;
+            border:4px solid @bg-col;
+            .radius(50%);
+            .pos(a);
+        }
+        .corner-area-left-top{
+            left:-8px;
+            top:-8px;
+        }
+        .corner-area-left-bottom{
+            left:-8px;
+            bottom:-8px;
+        }
+        .penalty-arc-right{
+            border-left-color:@bg-col;
+            right:52px;
+        }
+        .penalty-area-right{
+            right:-4px;
+            top:96px;
+        }
+        .penalty-spot-right{
+            right:91px;
+            top:245px;
+        }
+        .goal-area-right{
+            right:-4px;
+            top:196px;
+        }
+        .corner-area-right-top{
+            right:-8px;
+            top:-8px;
+        }
+        .corner-area-right-bottom{
+            right:-8px;
+            bottom:-8px;
+        }
+    }
+
+    .schedules{
+        &>div{
+            .pos(a);
+            .tc();
+            top:600px;
+            .transition(all 1.2s ease-in-out);
+        }
+
+        .match-vs16{
+            width: 150px;
+            height: 60px;
+            line-height: 60px;
+            background: #f1c40f;
+            color: #f9f9f9;
+        }
+
+        .match-vs8{
+            width: 150px;
+            height: 60px;
+            line-height: 60px;
+            background-color: #f39c12;
+            color: #f9f9f9;
+        }
+
+        .match-vs4{
+            width: 120px;
+            height: 80px;
+            line-height: 80px;
+            background-color: #e67e22;
+            color: #f9f9f9;
+        }
+
+        .match-vs2{
+            width: 120px;
+            height: 40px;
+            line-height: 40px;
+            background-color: #d35400;
+            color: #f9f9f9;
+        }
+
+    }
+
+    .canvas-container {
+        .pos(a);
+        left:0;
+        top:0;
+        width:1000px;
+        height:500px;
+        z-index:2;
+    }
+
+}
+
+.football-pitch.ready{
+    .lines{
+        opacity:1;
+        filter:alpha(opacity=100);
+    }
+
+    .schedules{
+        .match-49 {
+          left: 20px;
+          top: 40px;
+        }
+        .match-50 {
+          left: 20px;
+          top: 140px;
+        }
+        .match-53 {
+          left: 20px;
+          top: 300px;
+        }
+        .match-54 {
+          left: 20px;
+          top: 400px;
+        }
+        .match-51 {
+          right: 20px;
+          top: 40px;
+        }
+        .match-52 {
+          right: 20px;
+          top: 140px;
+        }
+        .match-55 {
+          right: 20px;
+          top: 300px;
+        }
+        .match-56 {
+          right: 20px;
+          top: 400px;
+        }
+        .match-57 {
+          left: 180px;
+          top: 80px;
+        }
+        .match-58 {
+          left: 180px;
+          top: 340px;
+        }
+        .match-59 {
+          right: 180px;
+          top: 80px;
+        }
+        .match-60 {
+          right: 180px;
+          top: 340px;
+        }
+        .match-61 {
+          left: 280px;
+          top: 200px;
+        }
+        .match-62 {
+          right: 280px;
+          top: 200px;
+        }
+        .match-63 {
+          left: 440px;
+          top: 260px;
+        }
+        .match-64 {
+          right: 440px;
+          top: 200px;
+          background: #c0392b;
+        }
+    }
+
+}

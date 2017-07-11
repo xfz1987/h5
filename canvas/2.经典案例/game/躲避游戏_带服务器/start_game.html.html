@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>   
+	<head>   
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>   
+		<title>game</title>   
+	</head>   
+	<body>   
+		<h1>是男人就撑过20秒</h1>
+		用户名:<input type="text" id="txt"/>
+		<button onclick="startGame()">开始游戏</button>
+		<script>
+			function startGame(){
+                var username = document.getElementById("txt").value;
+				if(username==""||username==undefined){
+					alert("请填写用户名，否则无法开游戏,填写已记录的用户名可以刷新个人记录!");
+					return;
+				}
+				var username = document.getElementById("txt").value;
+				if(!localStorage.getItem("$:" + username)){
+					localStorage.setItem("$:" + username,0);
+				}	
+				location.replace("game.html");
+			}
+					
+		</script>
+	</body>   
+</html> 

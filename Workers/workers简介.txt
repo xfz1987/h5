@@ -1,0 +1,52 @@
+一、概述
+   Web Workers是运行在后台的JavaScript，通过WEB Worker可以实现HTML5页面中的多线程，
+   充分利用多核CPU的优势，能够在独立运行大量计算任务的同时不影响页面的交互性，
+   提高用户体验。
+
+   使用WEB Worker的方法是将独立任务代码置于单独JS文件中，
+   然后通过new Worker(url)的方式创建独立线程，
+   使用过程中通过postMessage方法和message事件进行主线程和子线程之间的通信。
+
+   【注意】WebWorker中的代码不能访问DOM，也无法通过任何方式影响页面的外观
+
+二、使用
+  1.检测浏览器是否支持WebWorkders
+    if(typeof(Worker) !== undefined){
+      //当前浏览器支持Worker
+    }else{
+      //当前浏览器不支持Worker
+      //给出提示信息，更换浏览器
+    }
+
+  2.创建Worker文件（就是一个普通的js文件）
+    在该文件中完成WebWorkers的内容,允许使用Worker提供的内容
+    【注意】:该WebWorkers文件不要以<script>元素的方式引入
+    
+  3.创建Worker对象
+    var worker = new Work(url);
+    参数url:指定独立的Worker文件路径
+    
+    [html与Worker文件的通信]
+      
+     *onMessage事件:当Worker调用postMessage()方法传递信息时，该事件被触发
+                    在该事件的处理函数中可以获取Worker通过postMessage()传递的信息
+		    该事件的处理函数传递一个参数 event
+      
+     *onerror事件:当Worker文件内部的js在执行过程中出现错误时触发(处理函数参数 event)
+                  该事件有三个对象属性
+		  filename:发生错误的文件名
+		  lineno:发生错误的行号
+		  message:完整的错误信息
+
+     *postMessage()方法:
+
+  4.关闭Worker
+     terminate();
+
+三、Worker作用域（html 与  Worker 可以双向传输）
+   html向Worker传送消息
+   worker.postMessage(data);
+
+   Worker文件中接收页面传来的数据(监听)
+   seft.onMessage = function(event){}
+   或 onMessage = function(event){}

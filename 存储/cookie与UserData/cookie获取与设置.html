@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+    var cookieUtil = {
+        get : function(name){
+            var cookieName = encodeURIComponent(name) + "=",
+                cookieStart = document.cookie.indexOf(cookieName),
+                cookieValue = null;
+            if(cookieStart > -1){
+                var cookieEnd = document.cookie.indexOf(";",cookieStart);
+                if(cookieEnd == -1){
+                    cookieEnd = document.cookie.length;
+                }
+                return decodeURIComponent(document.cookie.substring(cookieStart + cookieName.length,cookieEnd));
+            }
+        },
+        set : function(name,value){
+            var time = new Date();
+            time.setDate(time.getDate()+7);
+            document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + ';expires=' + time.toGMTString();
+        },
+        unset : function(name){
+            document.cookie = encodeURIComponent(name) + '="";expires=' + new Date(0).toGMTString();
+        }
+    };
+    </script>
+</body>
+</html>

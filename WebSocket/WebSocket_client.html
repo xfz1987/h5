@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>WebSocket客户端示例</title>
+	</head>
+
+	<body>
+	    <h1>WebSocket客户端示例</h1>
+		<hr size="2" color="red">
+		<div id="message"></div>
+		<span>请输入一些文字:</span>
+		<input id="text" type="text"/><br/>
+		<button id="connect" onclick="connect()">连接服务器</button>
+		<button id="connect" onclick="send()">发送数据</button>
+		<button id="connect" onclick="disconnect()">断开连接</button>
+        <hr>
+		<textarea id="txtarea">服务器返回消息</textarea>
+
+		<script>
+			var socket,state=-1;
+			function connect(){
+				console.log("Connection Begin:");
+				if(socket == null || socket.readyState != 1){
+					socket = new WebSocket(host);
+				}
+
+				socket.onerror = function(){
+					console.log("Connection error!")
+				}
+
+				socket.onopen = function(e){
+					console.log("Connection isavaliable!");
+				}
+
+				socket.onmessage = function(e){
+                    console.log("Receive ServerMessage Beign:");
+					document.querySelector("#txtarea").innerHTML = e.data;
+					console.log("Receive ServerMessage End!");
+				}
+
+				socket.onclose = function(e){
+					console.log("Connection closed!");
+					document.querySelector("#txtarea").innerHTML += "/n" + event.wasClean + ";" + event.code + ";" + event.reason;
+				}
+			}
+
+			function send(){
+				if(socket.readyState == 1){
+					console.log("Send Message Begin:");
+					var text = document.querySelector("#text").value;
+					var message = {
+						time : new Date(),
+						clientId : "049";
+					};
+					if(text=="" || message == null){
+						console.log("No date to send!");
+						return;
+					}
+					socket.send(JSON.stringify(message));
+					socket.send(text);
+					console.log("Send Message End!");
+				}else{
+					console.log("Connection not aviliable,please create connection!");
+				}
+
+			}
+
+			/**
+			 * Web Socket 任何时候都可以关闭，没有什么限制
+			 * 可以根据需求进行控制
+			 */
+			function disconnect(){
+				console.log("Close Connection Begin:");
+				
+				socket.close();
+
+
+			}
+		</script>
+
+
+	</body>
+</html>

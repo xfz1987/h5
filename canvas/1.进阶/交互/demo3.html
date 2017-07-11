@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset = utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name = "viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title>canvas</title>
+</head>
+<body>
+    <canvas id="myCanvas" width="500" height="400" style="border:1px solid #000">Your browser is not support Canvas </canvas>
+
+    <script type="text/javascript" charset = "utf-8">
+         (function(doc,win) {
+            //引入requestAnimFrame框架，并保证兼容性
+            win.requestAnimFrame = (function(){
+                return win.requestAnimationFrame ||
+                    win.webkitRequestAnimati0onFrame ||
+                    win.mozRequestAnimationFrame ||
+                    win.oRequestAnimationFrame ||
+                    win.msRequestAnimationFrame ||
+                    function(callback){
+                        win.setTimeout(callback,1000/60);
+                    }
+            })();
+
+            var canvas = document.getElementById('myCanvas'),
+                ctx = canvas.getContext('2d'),
+                w = canvas.width,
+                h = canvas.height,
+                imgw = 30,
+                imgh = 30,
+                x = 0,//x坐标
+                y = 0,//y坐标
+                yh = 10,//要做婊
+                vy = 4,//y轴运动的速度,为了保证运动的连续性
+                end = false,
+                isCyc = false,//是否在垂直方向循环运动
+                count = 4,//图片的数量
+                posX = [],//用于存储随机生成的x坐标
+                temp = [],//临时存储交互区域的图片的垂直位置；[y1,y2...]
+                image,
+                timer;
+
+            function init(){
+                image = new Image();
+                image.src = 'con1.png';
+                image.onload = function(){
+                    timer = setInterval(function(){
+                        randomPos();
+                        loop();
+                    },5000);
+                };
+            };
+
+            function randomPos(){
+                var rx = 0,i=0;
+                while(posX.length < count){
+                    //Math.random()*(max-min)+min，范围是从[0,w-imgw)
+                    rx = Math.floor(Math.random()*(w-imgw));
+                    if(!isInZear(rx)){
+                        posX.push(rx);
+                    }
+                }
+            }
+            function isInZear(rx){
+                return (posX.some(function(item){
+                    return rx+imgw>=item && item+imgw>=rx;
+                }));
+            }
+
+            function loop(){
+                update();
+                end || requestAnimFrame(loop);
+            };
+
+            function update(){
+                clearCanvas();
+                move();
+                draw();
+            }
+
+            function clearCanvas(){
+                ctx.clearRect(0,0,w,h);
+            }
+
+            function move(){
+                y += vy;
+
+                //是否循环浮动
+                if(isCyc){
+                    if(y>=h){
+                        vy = -vy;
+                    }else if(y<=0){
+                        vy = Math.abs(vy);
+                    }
+                }else{
+                    if(y>=h) end = true;
+                }
+            }
+
+            function draw(){
+                for(var i=0,len=posX.length;i<len;i++){
+                    //保存当前画布状态，与restore成对儿出现
+                    ctx.save();
+
+                    ctx.drawImage(image,posX[i],y+i*yh,imgw,imgh);
+
+                    ctx.restore();
+                }
+            }
+
+            function drawClear(tx,ty){
+                for(var i=0;i<count;i++){
+                    //保存当前画布状态，与restore成对儿出现
+                    ctx.save();
+                    //判断交互坐标是否坐落在当前绘制图片内
+
+                    if((tx>posX[i] && tx<posX[i]+imgw) && (ty>y && ty<y+imgh) ){
+                        //表示只有点击到图片上时，才会停止运动
+                        end = true;
+
+                        //给图片填充背景方式
+                        ctx.beginPath();
+                        ctx.fillStyle = '#ddd';
+                        ctx.fillRect(posX[i],y,imgw,imgh);
+
+                        //清除图片的方式
+                        //ctx.clearRect(posX[i],y,imgw,imgh);
+
+                        temp.push(y);
+
+                    }else{
+                        var inTemp = false;
+                        for(var j=0,len2=temp.length;j<len2;j++){
+                            if(temp[j] == y){
+                                inTemp = true;
+                            }
+                        }
+
+                        !inTemp && ctx.drawImage(image,posX[i],y,imgw,imgh);
+                    }
+
+                    ctx.restore();
+                }
+            }
+
+            function stop(e){
+
+                e.preventDefault();
+
+                //在此处点击，则表示在画布的任意位置点击，都可以停止图片的运动
+                //end = true;
+
+                /*getBoundingClientRect获取元素位置。用于获得页面中某个元素的左，上，右和下分别相对浏览器视窗的位置。
+                  getBoundingClientRect是DOM元素到浏览器可视范围的距离（不包含文档卷起的部分）。
+                  该函数返回一个Object对象，该对象有6个属性：top,lef,right,bottom,width,height；
+                  这里的top、left和css中的理解很相似，
+                  width、height是元素自身的宽高，
+                  但是right是指元素右边界距窗口最左边的距离，
+                  bottom是指元素下边界距窗口最上面的距离。
+
+                  而我们要做的就是要将屏幕坐标点，转化成canvas中的坐标点
+                */
+
+                var bounding = canvas.getBoundingClientRect() || getClientRect();
+
+                if(e.type == 'touchstart'){
+                    var tx = e.touches[0].clientX - bounding.left;
+                    var ty = e.touches[0].clientY - bounding.top;
+                }else if(e.type == 'mousedown'){
+                    var tx = e.clientX - bounding.left
+                    var ty = e.clientY - bounding.top;
+                }
+
+                drawClear(tx,ty);
+            }
+
+            canvas.addEventListener('mousedown', stop,false);
+
+            canvas.addEventListener('touchstart', stop,false);
+
+            doc.addEventListener('DOMContentLoaded', init, false);//文档树构建完成，dom树构建之前，触发，比onload要快
+
+        })(document,window);
+
+    </script>
+</body>
+</html>

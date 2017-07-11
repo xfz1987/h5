@@ -1,0 +1,53 @@
+* 离线检测:
+  方式一:存在兼容性
+  if(navigator.onLine){
+    //正常工作
+  }else{
+    //执行离线状态时的任务
+  }
+
+  方式二:当网络在离线与在线转换时，分别别触发这两个事件，这两个条件在window对象上触发
+  EventUtil.addHandler(window,"online",function(){});
+  EventUtil.addHandler(window,"offline",function(){});
+
+* mainifest文件
+  * 缺点: 1.每次资源更新后，客户端需要刷新两次，才能拿到最新的资源文件
+          2.无法单点更新，mainifest中哪怕只有一个资源例如img变化，也会重新将所有资源重新拉取一次，不管你有没有变化
+          3.html也会被作为缓存
+          4.对于链接的参数变化是敏感的，也会被当作修改了，
+            例如 index.html 与 index.html?re=1
+    优点: 1.完全离线
+          2.资源被缓存，加载更快
+          3.降低server负载
+
+  基本格式: 通过版本号来判别式否更新
+  ---------------------文件-----------------------------
+  CACHE MANIFEST
+  #version n.n
+
+  CACHE:
+  #需要缓存的文件
+  /css/sample.css
+  /images/image.jpg
+
+  NETWORK:
+  #每次重新拉取的文件
+
+  FALLBACK:
+  #离线状况下代替文件
+  /offline.html
+
+  -------------------使用-------------------------------
+  客户端  <html manifest = "sample.appcache">
+  服务端  添加mime-type text/cache-manifest
+          1.Apache 支持 manifest
+            新建或者编辑现有的 .htaccess 文件，在里面加上一行：
+            text/cache-manifest .manifest
+
+          2.Tomcat 支持 manifest
+            web.xml
+            <mime-mapping>
+                <extension>manifest</extension>
+                <mime-type>text/cache-manifest</mime-type>
+            </mime-mapping>
+

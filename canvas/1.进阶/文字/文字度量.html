@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+  <title>文字度量</title>
+  <style>
+  #canvas{
+    border:1px solid #aaa;
+    display: block;
+    margin: 50px auto;
+  }
+  </style>
+</head>
+<body>
+<h3>.measureText(s)</h3>
+
+<canvas id="canvas" width="400" height="400">如果不支持，我会显示</canvas>
+</body>
+<script type="text/javascript">
+    var canvas = document.getElementById('canvas');
+    var context=canvas.getContext('2d');
+    context.font="italic bold 24px Arial";
+    var s='我们是二逼青年';
+    context.fillText(s,50,200);
+    alert(context.measureText(s).width);
+
+</script>
+</html>

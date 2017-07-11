@@ -1,0 +1,76 @@
+一、概述
+   1.SVG:可伸缩矢量图，同时也是一种图片格式(*.avg),使用XML语法（svg已经将xml的标签定义好了）
+	 用途:网站动态小图标、百度地图
+   2.优势:
+          可以通过文本编辑器来创建和修改
+	  可被搜索引擎收缩、脚本化或压缩
+	  *svg的图像质量不会失真
+     缺点:
+          原生的SVG由于使用XML语法，过于复杂
+
+   3.与canvas的区别:
+	①canvas依赖于分辨率、svg不依赖分辨率
+	②canvas不支持事件处理器(不能绑定事件)、svg支持事件处理器
+	③svg适合大型图像处理（对性能的很低，不消耗CPU）、canvas不适合大型图像处理
+	④canvas更适合做游戏、svg不能做游戏
+             
+   4.使用:
+     1.创建SVG文件（XXX.svg）
+     2.HTML5之前
+       使用iframe框架，用src来指定.svg文件
+       使用Object元素，用src来指定.svg文件
+       使用embed(插件方式)元素，用src来指定.svg文件
+     3.HTML5
+       <svg id="svg" width="400" height="400">
+          <rect></rect>
+	  <circle></circle>
+       </svg>
+       注意:只使用svg无任何效果，要继续在<svg>中定义元素,不能使用css内容
+     
+二、绘制（可以使用单标签）
+   1.矩形
+     <rect x="" y="" width="" height="" fill="yellow" stroke="blue" style="fill:red" stroke-width="2"></rect>
+
+   2.圆形
+     <circle cx="圆心x" cy="圆心y" r="半径" fill="" storke="" stroke-width=""></circle>
+
+   3.椭圆  
+     <ellipse cx="椭圆圆心x" cy="椭圆圆心y" rx="水平半径" ry="垂直半径" fill="" storke="" stroke-width=""></ellipse>
+   
+   4.线条   
+     <line x1="起点x" y1="起点y" x2="终点x" y2="终点y" storke="" stroke-width=""></line>
+   
+   5.折线   
+     <polyline points="0,0 0,20 20,20 40,60" style="fill:white;stroke:red;storke-width:2"></polyline>
+     0,0起点 0,20 20,20是折点  40,60终点
+
+   6.多边形（至少三个点坐标）   
+     <polygon points="0,0 0,20 20,20 40,60" style="fill:blue;stroke:red;storke-width:2"></polypone>
+   
+   7.渐变（必须定义在 <defs></defs> 中）   
+     线性渐变
+     <defs>
+        <linearGradient id="xb" x1="基准线起点x%" y1="基准线起点y%" x2="基准线终点x%" y2="基准线终点y%">
+	    <stop offset="0%" style="stop-color:red;stop-opacity:0.5"/>
+	    <stop offset="50%" style="stop-color:yellow;stop-opacity:0.5"/>
+	    <stop offset="100%" style="stop-color:blue;stop-opacity:0.5"/>	
+	</linearGradient>
+     </defs>
+     
+     椭圆使用渐变
+     <ellipse cx="" cy="" rx="" ry="" style="fill:url(#xb)"/>
+     
+     放射性渐变
+     <radialGradient></radialGradient>
+   
+   8.高斯模糊（必须定义在 <defs></defs> 中）   
+     filter创建滤镜       
+     stdDeviation模糊程度  
+     in="SourceGraphic"定义了由整个图像创建效果
+     
+     <defs>
+	<filter id="gs">
+	    <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
+	</filter>
+     </defs>
+     <ellipse cx="" cy="" rx="" ry="" style="filter:url(#gs)"/>

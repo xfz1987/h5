@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>三角形</title>
+	</head>
+
+	<body>
+		<canvas id="drawing" width="400" height="400">A drawing of something</canvas>
+
+	</body>
+	<script>
+		var drawing = document.querySelector("#drawing");
+		if(drawing.getContext){
+			var context = drawing.getContext("2d");
+			context.beginPath();
+			context.moveTo(10,10);
+			context.lineTo(100,10);
+			context.lineTo(55,100);
+			context.fill();
+			
+			context.beginPath();
+			context.moveTo(55,100);
+			context.lineTo(10,200);
+			context.lineTo(100,200);
+			context.closePath();
+			context.stroke();
+		}
+	</script>
+</html>

@@ -1,0 +1,42 @@
+Geolocation 地理定位
+
+  *可以实现地理定位的方式：
+    GPS:卫星定位(依赖卫星的数量、信号等问题)
+    
+    网络:PC互联网和移动互联网
+         pc互联网:IP地址进行定位（不准确）
+	 移动网：定位硬件结合网络（比较准确）
+    
+    手机芯片定位:SIM卡是基站定位
+    
+    北斗定位:军用
+
+    浏览器定位 - 火狐 Google Map
+
+    H5定位：本身内容是不能完成地理定位
+             官方借助了第三方支持 -Goolge Map
+
+
+【使用百度Map】
+ navigator对象中的Geolocation就是地理定位
+ 
+    navigator.Geolocation.getCurrentPosition():获取当前位置信息(经度和纬度)
+    navigator.Geolocation.watchPosition():查看当前位置信息
+    navigator.Geolocation.clearWathc():清除
+
+    Geolocation对象不能访问到:document、window、parent对象
+               说白了就是不能操作元素节点  
+
+----------------------------------------------------------------------------------------------
+ ①在HTML中引入百度Map的js文件,并设置“您的密钥”
+   <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=您的密钥"></script>
+ ②在HTML中创建容纳百度地图的容器（div）
+   <div id="allmap"></div>
+ ③利用百度地图API 用js完成需求
+
+ 【常用类】
+  Map类:通过该类的构造函数得到百度地图的对象
+  控件类:
+  Marker类:在题图上标准信息
+  getCurrentPosition();获取当前位置
+

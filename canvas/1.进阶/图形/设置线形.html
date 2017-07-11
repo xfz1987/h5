@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>设置线形</title>
+	</head>
+
+	<body>
+		<canvas id="drawing" width="400" height="400">A drawing of something</canvas>
+
+		
+		<script>			
+			var canv = document.querySelector("#drawing");
+			if(canv.getContext){
+				var context = canv.getContext("2d");
+				context.beginPath();
+				context.lineWidth = "20";
+				context.lineCap = "round";
+				//context.lineJoin = "bevel";
+				//context.lineJoin = "round";
+				context.miterLimit = "3";
+				context.moveTo(110,10);
+				context.lineTo(110,110);
+				context.lineTo(200,40);
+				context.stroke();
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,62 @@
+1.Socket与HTTP的区别
+ Http:
+      无状态，这次会话中，服务器不会记住上次会话的内容
+      只能实现客户端到服务器端，再到客户端的过程
+      （长连接、长轮询、实时连接）
+
+ Socket:
+      实时连接协议
+      
+2.Web Sockets   
+   Web Socket是HTML5中一种新的通信协议，它实现了浏览器与服务器全双工通信。
+   其特点是客户端和服务器之间的连接是实时的、永久的，双方都可以主动发送消息。
+   客户端不再需要通过轮询实现实时性，性能优越。服务器端与客户端之间通信无需重新建立连接。
+  使用标准的HTTP服务器无法实现Web Sockets，需要专门的服务器
+  使用自定义协议:http:// 转为 ws://
+                  https:// 转为 wss://
+
+  优点:
+       能够在客户端和服务器之间发送非常少量的数据,而不必担心HTTP那样字节集的开销
+       数据包小，更适合移动应用开发
+  
+  缺点:
+       制定协议复杂，存在较大的安全隐患
+  
+  使用:
+  1.建立连接
+    var socket = new WebSocket("ws://www.xxx.com");
+   
+  2.发送
+    socket.send(data);先服务器发送请求数据
+  3.关闭连接
+    socket.close();
+  
+  获取服务器端相应的数据
+    socket.onmessage = function(e){
+	var data = event.data;
+    };
+
+  监听web socket是否打开
+    socket.onopen = function(){
+	console.log("Connection isavaliable!");
+    };
+  
+  监听web socket关闭
+    socket.onclose = function(){
+	console.log("Connection closed!");
+	event.wasClean;// true/false表示连接是否已经完全关闭
+	event.code;// 服务器返回的数值状态码
+	event.reason;//字符串，服务器发回的信息
+    };
+  
+  发生错误(连接不能持续了)
+    socket.onerror = function(){
+	console.log("Connection error!");
+    };
+
+
+  通过 readyState属性来获取WebSocket对象的状态
+    connecting:0,表示正在连接
+    open:1，表示已建立连接
+    closing:2，表示正在关闭连接
+    closed:3，表示已关闭连接

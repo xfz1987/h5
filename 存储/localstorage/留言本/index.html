@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>记事本</title>
+  <script src="index.js"></script>
+</head>
+<body>
+  <h1 align="center">记事本</h1>
+  <hr size="1" color="red"/>
+  <div style="margin:0 auto;width:400px;height:auto;">
+  <p id="msg"></p>
+  <textarea id="meno" cols="40" rows="10"></textarea><br/>
+  <input type="button" value="增加记录" onclick="saveRec('meno')"/>
+  <input type="button" value="清空记录" onclick="clearRec()"/><br/>
+  </div>
+</body>
+</html>

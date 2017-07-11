@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>圆形渐变</title>
+	</head>
+
+	<body>
+		<canvas id="drawing" width="600" height="600">A drawing of something</canvas>
+
+	</body>
+	    <!--圆形渐变-->
+		<script>
+			var canv = document.querySelector("#drawing");
+			if(canv.getContext){
+				var context = canv.getContext("2d");
+				var g= context.createRadialGradient(50,100,0,100,100,100);
+				g.addColorStop(0.0,'#fff');
+				g.addColorStop(1.0,'#000');
+				context.translate(20,20);
+				context.scale(2,2);
+
+				context.fillStyle=g;
+				context.arc(100,100,100,0,2*Math.PI);
+				context.fill();
+		   }
+	</script>
+
+</html>

@@ -1,0 +1,54 @@
+【验证事件】
+ 当指定元素验证不通过时，会触发invalid事件
+ 该事件处理函数:错误处理逻辑（给出错误提示）
+ 属性:
+  target:只读，验证不通过的元素
+  type:只读，事件类型
+  bubbles:只读，该事件是否为冒泡
+  canceable:只读，是否可以取消该事件
+
+  【举例】
+  		<form id="myForm">
+			用户名:<input type="text" required maxlength="12"/><label id="errorMsg"></label><br/>
+			<input type="submit"/>
+		</form>
+
+		<script>
+			document.forms[0].elements[0].addEventListener("invalid",valiadMsg,true);
+			function valiadMsg(){
+				document.querySelector("#errorMsg").innerHTML = "<b><font color='red'>*用户名不能为空</font></b>"
+			}
+		</script>
+
+------------------------------------------------------------------------------------------------------
+【验证状态】
+ 验证元素的validity属性的validityState对象的一系列属性
+ 控件.validity.valid  //true验证通过
+
+ 控件.validity.valueMissing //true,说明使用了required属性，并且输入为空
+
+ 控件.validity.typeMismatch //true,输入不符合指定的类型，返回true，例如：email
+
+ 控件.validity.patternMismaatch //true,输入内容与所设置模式不匹配
+
+ 控件.validity.tooLong //true,输入内容长度大于maxlength
+
+ 控件.validity.rangeUnderflow //true,输入内容小于min
+
+ 控件.validity.stepMismatch //true,给定的值与min、max、step不一致
+
+ 自定义错误状态:true不通过
+  1.设置自定义错误，只有在表单提交时并且验证不通过，才能显示该自定义错误信息，其实就是替换浏览器的提示信息
+    if(控件.value==""){
+	控件.setCustomValidity("输入不能为空");
+    }else if(控件.vilidity.valid){
+	控件.setCustomValidity("");//必须置空，否则会一直存着，即使输入正确
+    }
+  2.当1完成后，通过2才能处理来显示
+  if(控件.validity.customError){}
+
+【验证方法】
+ 1.控件.setCustomValidity(提示信息);
+
+ 2.控件.checkVlidity():表示验证该表单的元素是否通过验证，true验证通过
+

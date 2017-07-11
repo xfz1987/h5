@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <!--
+    背景:临时存储空间:便利，但容易被用户删除
+    H5:提供了一个永久性存储空间，FileSystem API
+    应用场景:文件上传，视频游戏，大量媒体数据
+  -->
+  <!--
+    申请磁盘配额
+  -->
+  <script>
+    window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+    var fs = null;
+    var msg = "";
+    if(window.requestFileSystem){
+      initFs();
+    }
+    function initFs(){
+      window.requestFileSystem(window.TEMPORARY,1024*10,function(fileSystem){
+          fs = fileSystem;
+          document.getElementById("result").innerHTML = "当前浏览器可以操作";
+        },errorHandler)
+    }
+    function errorHandler(e){
+      switch(e.code){
+        case FileError.NOT_FOUND_ERR:
+          msg = "未找到文件或目录";
+          break;
+        case FileError.SECURITY_ERR:
+          msg = "操作不当引起的安全性错误";
+          break;
+      }
+      document.getElementById("result").innerHTML = msg;
+    }
+
+    function getSize(){
+      var size = document.getElementById("capacity");
+      window.web
+    }
+
+  </script>
+</head>
+<body>
+  <output id="result"></output>
+  <form>
+    <input type="text" id="capacity" value="1024"/>
+    <input type="button" value="申请磁盘配额" onclick=""/>
+  </form>
+  <output id="msg"></output>
+</body>
+</html>

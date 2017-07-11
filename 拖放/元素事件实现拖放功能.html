@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>元素事件</title>
+	</head>
+
+	<body>
+		<img id="mi" src="1.png" style="float:left;" draggable="true"/>
+		<div id="myDiv" style="width:400px;height:400px;border:1px solid #e4393c;float:right;"></div>
+		<script>
+
+			/*源元素事件*/
+			var img = document.getElementById("mi");
+			img.addEventListener("dragstart",start,false);
+			img.addEventListener("drag",process,false);
+			img.addEventListener("dragend",end,false);
+			function start(e){
+				console.log("开始");
+				var transfer = e.dataTransfer;
+				var target = e.target||e.srcElement;
+				transfer.setData("text",target.src);	
+			}
+			function process(e){
+				//console.log("拖放中");
+				var transfer = e.dataTransfer;
+				//transfer.effectAllowed = "move"; 
+				//var newimg =  new Image();
+				//newimg.src = "2.png";
+				//transfer.setDragImage(img,0,0);//????
+				
+				transfer.effectAllowed = "move";
+				transfer.setDragImage(e.target,0,0);
+		
+			}
+			function end(){
+				console.log("结束");
+			}
+
+			/*目标元素事件*/
+			var div = document.querySelector("#myDiv");
+			div.addEventListener("dragenter",enter,false);
+			div.addEventListener("dragover",over,false);
+			div.addEventListener("drop",drop,false);
+			div.addEventListener("dragleave",leave,false);
+			function enter(e){
+				e.preventDefault();
+				div.innerHTML = "进入目标区域";
+			}
+			function over(e){
+				e.preventDefault();
+				div.innerHTML = "到达目标位置";
+			}
+			function drop(e){
+				e.preventDefault();
+				div.innerHTML = "拖放完成";
+				var transfer = e.dataTransfer;
+				var newimg = document.createElement("img");
+				newimg.src = transfer.getData("text");
+				div.appendChild(newimg); 
+
+				//剪切效果
+				img.parentNode.removeChild(img);
+							
+			}
+			function leave(e){
+				e.preventDefault();
+				div.innerHTML = "离开目标区域";
+			}
+
+
+		</script>
+
+	</body>
+</html>

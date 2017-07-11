@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>线性渐变</title>
+	</head>
+
+	<body>
+		<canvas id="drawing" width="400" height="400" style="background:gray;float:left;">A drawing of something</canvas>
+		<canvas id="drawingRadia" width="400" height="400" style="float:left;background:gray;">A drawing of something</canvas>
+
+		<!--线性渐变-->
+		<script>			
+			var canv = document.querySelector("#drawing");
+			if(canv.getContext){
+				var context = canv.getContext("2d");
+				//创建渐变的基准线（水平）
+				//var grad = context.createLinearGradient(0,0,canv.width,0);
+				//垂直
+				//var grad = context.createLinearGradient(0,0,0,canv.height);
+				//斜着来
+				var grad = context.createLinearGradient(0,0,canv.width,canv.height);
+				//添加颜色
+				grad.addColorStop(0,"yellow");
+				grad.addColorStop(0.5,"red");
+				grad.addColorStop(1,"blue");
+				//画矩形
+				context.fillStyle = grad;//将渐变加入到矩形中
+				context.fillRect(0,0,canv.width,canv.height);
+			}
+		</script>
+	</body>
+</html>

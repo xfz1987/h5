@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>IE用户数据</title>
+	</head>
+<body> 
+	 <!--简介
+	 在IE5.0中，通过自定义行为引入了持久化用户数据的概念，
+	 用户数据允许每个文档最多128KB数据，每个域名最多1MB数据
+	 用户数据默认是可以跨越会话持久存在的，同时也不会过期，
+	 需要用removeAttribute()删除来释放空间
+	 -->
+	 <!--1.必须使用CSS在某个元素上指定userData行为-->
+	 <div style="behavior:url(#default#userData)" id="dataSource"></div>
+	 <button id="set" onclick="setDate()">保存数据至缓存</button><br/>
+	 <button id="get" onclick="getDate()">从缓存中取数据</button>
+	<script>
+		var dataSource = document.getElementById("dataSource");
+		/*2.通过setAttribute()和save()方法保存数据*/
+		function setDate(){			
+			dataSource.setAttribute("name", "fengge");
+			dataSource.setAttribute("book", "javascript");
+			dataSource.save("BookInfo");
+		}
+		/*3.通过load获取数据*/
+		function getDate(){
+			dataSource.load("BookInfo");
+			alert(dataSource.getAttribute("name"));
+			alert(dataSource.getAttribute("book"));
+		}
+		/*4.删除数据,最后要save(),否则不生效*/
+		function removeDate(){
+			dataSource.removeAttribute("name");
+			dataSource.removeAttribute("book");
+			dataSource.save("BookInfo");
+		}
+
+	</script>
+</body> 
+</html>
+
+

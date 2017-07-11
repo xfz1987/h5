@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>动态表盘</title>
+		<style>
+			#hands{stroke:black;stroke-linecap:round;}
+			#hourhand{stroke-width:5px;} 
+			#minutehand{stroke-width:2px;} 
+			#secondhand{stroke-width:2px;}
+			#numbers{font-family:sans-serif;font-size:15pt;font-weight:bold;text-anchor:middle;stroke:none;fill:black; } 
+		</style>
+	</head>
+	
+	<body>
+		<svg id="svg" width="400" height="400" >
+			<defs>
+				<linearGradient id="xb" x1="0%" y1="0%" x2="100%" y2="100%">
+					<stop offset="0%" style="stop-color:red"/>
+					<stop offset="50%" style="stop-color:yellow"/>
+					<stop offset="100%" style="stop-color:blue"/>	
+				</linearGradient>
+				<filter id="gs">
+					<feGaussianBlur in="SourceGraphic" stdDeviation="5"/>
+				</filter>
+			</defs> 
+			<!-- 表盘 -->
+			<circle id="face" cx="200" cy="200" r="150" style="stroke-width:10;stroke:url(#xb);fill:#FABFC1;filter:url(#gs)"/>				
+			<!-- 表盘数字--> 
+			<g id="numbers"> 
+				<text x="200" y="80">12</text>
+				<text x="320" y="205">3</text>
+				<text x="200" y="330">6</text>
+				<text x="70" y="205">9</text> 
+			</g> 
+
+			<!-- 表针 --> 
+			<g id="hands"> 
+				<line id="hourhand" x1="200" y1="200" x2="200" y2="120"/> 
+				<line id="minutehand" x1="200" y1="200" x2="200" y2="90"/> 
+				<line id="secondhand" x1="200" y1="200" x2="200" y2="80" style="stroke:#e4393c"/> 
+			</g> 			
+		</svg>	
+		
+		<script>
+			window.onload = function(){
+				updateTime();		
+			}
+			function updateTime(){
+				var now = new Date();
+				var second = now.getSeconds();
+				var min = now.getMinutes() + second/60;//分钟数
+				var hour = (now.getHours()%12) + min/60;//小时数
+				var sangel = second*6;//每秒钟6度
+				var mangel = min*6;//每分钟6度
+				var hangel = hour*30;//每小时30度
+							
+				var sechand = document.querySelector("#secondhand");
+				var minhand = document.querySelector("#minutehand"); 
+				var hourhand = document.querySelector("#hourhand"); 
+
+				//设置相应SVG元素的transform属性控制表针移动
+				sechand.setAttribute("transform","rotate(" + sangel + ",200,200)"); 
+				minhand.setAttribute("transform","rotate(" + mangel + ",200,200)"); 
+				hourhand.setAttribute("transform","rotate(" + hangel + ",200,200)"); 
+
+				setTimeout(updateTime,1000);
+			}
+			var svg = document.querySelector("#svg");
+			
+		</script>
+
+		
+	</body>
+</html>

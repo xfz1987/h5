@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>渐变和高斯模糊案例</title>
+	</head>
+	
+	<body>
+		<svg id="svg" width="400" height="400">
+			<defs>
+				<linearGradient id="xb" x1="0%" y1="0%" x2="100%" y2="100%">
+					<stop offset="0%" style="stop-color:red"/>
+					<stop offset="50%" style="stop-color:yellow"/>
+					<stop offset="100%" style="stop-color:blue"/>	
+				</linearGradient>			
+			</defs> 
+			<defs>
+				<filter id="gs">
+					<feGaussianBlur in="SourceGraphic" stdDeviation="5"/>
+				</filter>
+			</defs>
+			<ellipse cx="100" cy="100" rx="100" ry="50" style="stroke:gray;fill:url(#xb);filter:url(#gs)"/>	
+		</svg>
+	</body>
+</html>

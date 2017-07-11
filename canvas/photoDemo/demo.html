@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+</head>
+<body>
+	<input type="file" id="uploadPhoto">
+	<script>
+		var Resizer = function(maxWidth){
+			if(this instanceof Resizer){
+				this.maxWidth = maxWidth || 300;
+			}else{
+				return new Resizer(maxWidth)
+			}
+		};
+		Resizer.prototype.compress = function(data,callback){
+			_this = this;
+			var img = new Image();
+			img.src = data;
+			img.onload = function(){
+				var w = img.width,h = img.height,_w,_h;
+				if(w > h){
+					_w = _this.maxWidth;
+					_h = h * _w / w;
+				}else{
+					_h = _this.maxWidth;
+					_w = _h * w / h;
+				}
+				var canvas = document.createElement('canvas'),ctx = canvas.getContext('2d');
+				canvas.width = _w;
+				canvas.height = _h;
+				ctx.drawImage(img,0,0,_w,_h);
+				//document.body.appendChild(canvas);
+				callback(canvas.toDataURL('image/png'));
+			}
+		};
+		
+		document.getElementById('uploadPhoto').onchange = function(e){
+			var file = e.currentTarget.files[0],reader= new FileReader();
+			reader.readAsDataURL(file)
+            reader.onload=function(){
+                //´óÓÚ200KB²ÅÑ¹Ëõ
+                if(parseInt(file.size/1024,10) >= 100){
+                  Resizer().compress(this.result,function(_data){
+					alert(1)
+					console.log(_data.substr(_data.indexOf('/')+1));
+                  });
+                }else{
+					alert(2)
+					console.log(this.result.substr(this.result.indexOf('/')+1));
+                }
+            };
+		}		
+
+	</script>
+</body>
+</html>

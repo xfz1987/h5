@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function set(key,value){
+            var curTime = new Date().getTime();
+            localStorage.setItem(key,JSON.stringify({data:value,time:curTime}));
+        }
+
+        function get(key,exp){
+            var data = localStorage.getItem(key);
+            var dataObj = JSON.parse(data);
+            if(new Date().getTime() - dataObj.time > exp){
+
+                console.log('过期');
+            }else{
+                console.log('data=' + dataObj.data);
+            }
+        }
+
+        //在浏览器控制台测试
+
+    </script>
+</body>
+</html>

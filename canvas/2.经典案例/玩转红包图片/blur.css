@@ -1,0 +1,62 @@
+@charset 'utf-8';
+* {
+  margin: 0;
+  padding: 0;
+}
+.blur-div {
+  width: 800px;
+  height: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+.blur-img,
+#canvas {
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+.blur-img {
+  width: 100%;
+  height: 100%;
+  /*滤镜模糊*/
+  -webkit-filter: blur(20px);
+  -moz-filter: blur(20px);
+  -ms-filter: blur(20px);
+  -o-filter: blur(20px);
+  filter: blur(20px);
+  z-index: 0;
+}
+#canvas {
+  z-index: 1;
+}
+.button {
+  display: block;
+  position: absolute;
+  z-index: 2;
+  width: 100px;
+  height: 30px;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  line-height: 30px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+#reset-button {
+  left: 200px;
+  bottom: 20px;
+  background: #058;
+}
+#reset-button:hover {
+  background: #047;
+}
+#show-button {
+  right: 200px;
+  bottom: 20px;
+  background: #085;
+}
+#show-button:hover {
+  background: #074;
+}

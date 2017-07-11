@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .container{text-align:center;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="statCanvs" width="800" height="500">您的浏览器不支持Canvas</canvas>
+    </div>
+
+    <script>
+        window.onload =function(){
+            var data = [
+                {"key":"1月","value":"500.00"},
+                {"key":"2月","value":"1700.00"},
+                {"key":"3月","value":"3000.00"},
+                {"key":"3月","value":"3000.00"},
+                {"key":"4月","value":"1000.00"},
+                {"key":"5月","value":"2000.00"},
+                {"key":"6月","value":"3500.00"},
+                {"key":"7月","value":"500.00"},
+                {"key":"8月","value":"0.00"},
+                {"key":"9月","value":"1200.00"}
+            ];
+
+            var canvas = document.getElementById("statCanvs"),
+                ctx = canvas.getContext('2d'),
+                padding = 80, //canvas内容内边距
+                ch = canvas.height,//高
+                cw = canvas.width,//宽
+                or = {x:padding, y:ch - padding},//原点(0,0)
+                br = {x:cw - padding, y:ch - padding},//x轴的右端点
+                lt = {x:padding, y:padding},//y轴的上端点
+                avgWidth = 0,
+                avgHeight = 0,
+                avgValue = 0;//data数据的平均值
+            //根据统计信息绘制曲线图
+            drawStat(data);
+
+            function drawStat(data){
+                ctx.strokeStyle = 'steelblue';
+                ctx.fillStyle = 'steelblue';
+
+                //绘制坐标轴
+                drawAxis();
+
+                //绘制x轴的刻度线
+                drawAxis_xTick(data);
+
+                //绘制y轴的刻度线
+                drawAxis_yTick(data);
+
+                //绘制折现图
+                drawData(data);
+            }
+
+            function drawAxis(){
+                //绘制x坐标轴
+                ctx.beginPath();
+                ctx.moveTo(or.x,or.y);//将画笔先移动到原点
+                ctx.lineTo(br.x,br.y);//画出x轴
+                ctx.stroke();//绘制轮廓
+                //绘制y坐标轴
+                ctx.moveTo(or.x,or.y);
+                ctx.lineTo(lt.x,lt.y);
+                ctx.stroke();
+
+                //绘制x轴箭头
+                ctx.beginPath()
+                ctx.moveTo(br.x,br.y);
+                ctx.lineTo(br.x-5,br.y-5);
+                ctx.lineTo(br.x-5,br.y+5);
+                ctx.fill();
+                //绘制y轴箭头
+                ctx.beginPath();
+                ctx.moveTo(lt.x,lt.y);
+                ctx.lineTo(lt.x+5,lt.y+5);
+                ctx.lineTo(lt.x-5,lt.y+5);
+                ctx.fill();
+            }
+
+            function drawAxis_xTick(data){
+                //刻度数: 数据的数量-1：因为原点也是也数量
+                //每一个刻度的宽度: (总宽度 - 2padding - 适应值)/刻度数
+                ctx.beginPath();
+                console.log(data.length);
+                avgWidth = Math.floor((cw - 2 * padding - 50)/(data.length - 1));
+                for(var i=0,len=data.length;i<len;i++){
+                    // if(i == 0)  continue;
+                    ctx.moveTo(or.x + i * avgWidth, or.y);
+                    ctx.lineTo(or.x + i * avgWidth, or.y - 10);
+                    //填上文字
+                    ctx.font = "16px SimHei";
+                    ctx.textBaseline = "top";
+                    ctx.fillText(data[i].key, or.x + i * avgWidth - 10, or.y + 5);
+                }
+                ctx.stroke();
+            }
+
+            function drawAxis_yTick(data){
+                //绘制y轴的刻度线，获取y轴data数据的最大值
+                ctx.beginPath();
+                avgHeight = Math.floor((ch - 2 * padding - 50)/(data.length - 1));
+                var max = 0;
+                for(var i=0,len=data.length;i<len;i++){
+                    var temp = parseInt(data[i].value);
+                    max = temp > max ? temp : max;
+                    ctx.moveTo(or.x, or.y - i * avgHeight);
+                    ctx.lineTo(or.x + 10, or.y - i * avgHeight);
+                }
+
+                //y轴填上文字
+                avgValue = Math.floor(max/(data.length - 1));
+                for(var i=0,len=data.length;i<len;i++){
+                    ctx.font = "16px SimHei";
+                    ctx.textAlign = 'right';
+                    ctx.fillText(avgValue * i,or.x-5, or.y - i * avgHeight - 8);
+                }
+                ctx.stroke();
+            }
+
+            function drawData(data){
+                for(var i=0,len=data.length;i<len;i++){
+                    //画圆形
+                    ctx.beginPath();
+                    ctx.arc(or.x + i * avgWidth, or.y - (parseInt(data[i].value)/avgValue) * avgHeight, 4, 0, Math.PI*2);
+                    ctx.fill();
+
+                    //画折线图
+                    ctx.beginPath();
+                    if(i < len - 1){
+                        ctx.moveTo(or.x + i * avgWidth, or.y - (parseInt(data[i].value)/avgValue) * avgHeight);
+                        ctx.lineTo(or.x + (i+1) * avgWidth, or.y - (parseInt(data[i+1].value)/avgValue) * avgHeight);
+                    }
+
+                    //填写文字
+                    ctx.font = "16px SimHei";
+                    ctx.textBaseline = "bottom";
+                    ctx.fillText(data[i].value, or.x + i * avgWidth, or.y - (parseInt(data[i].value)/avgValue) * avgHeight,
+                    or.y - (parseInt(data[i].value)/avgValue) * avgHeight);
+                    ctx.stroke();
+                }
+            }
+        };
+    </script>
+</body>
+</html>

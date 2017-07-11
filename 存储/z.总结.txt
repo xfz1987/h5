@@ -1,0 +1,119 @@
+ 【黑暗时期】
+    * cookies
+      1.http请求头上会带着，
+      2.大小4K，
+      3.主Domain污染（主域名下所有子页面http请求都会带着cookie，太臃肿），
+
+    * UserData
+      只有IE支持，XML文件
+
+
+【本地存储】
+* API : sessionStorage 和 localStorage（getItem  setItem removeItem key clear）
+  存储形式: key -> value
+  大小: 每个域名5M
+  过期: 永不过期，除非手动删除
+  内容: 数组/json/图片/脚本/样式文件
+  限制: ① 过期机制需要自己code处理，
+        ② 子域名之间不能共享存储数据，使用postMessage来处理吧
+        ③ 超出存储大小之后如何存储（LRU,FIFO）
+        ④ server想获取，只能页面post了
+  应用:利用本地数据，减少网络传输，将脚本，或样式放在本地
+
+
+* sessionStorage
+  定义: 储存特定某个会话的数据(依赖浏览器:浏览器关闭，数据就会消失，替代传统的session)
+  缺点: sessionStorage中的数据只能由最初给对象存储数据的页面访问到，对多页面应用有限制
+  创建: ① sessionStorge.setItem(key,value);
+        ② sessionStorage[key] = value;
+        ③ sessionStorage.key = value;
+  获取: sessionStorage.getItem(key);
+  数量: sessionStorage.length;
+  根据索引值获取对应的key : sessionStorage.getItem(sessionStorage.key(item));
+  删除: removeItem(key);
+  清空: sessionStorage.clear();
+
+  [扩展:IE]
+    firefox和Webkit实现了同步写入，所以添加到存储空间中的数据是立刻被提交的
+    IE:是异步写入数据的，有延迟，对于少量数据可以忽略，但是大数据，有问题
+       IE8可以强制把数据写入磁盘：在设置新数据前调用 begin()方法，设置完成后调用 commit()方法
+       sessionStorage.begin();
+       sessionStorage.name = "gzf";
+       sessionStorage.book = "java";
+       sessionStorage.commit();
+
+* localStorage
+  用法与sessionStorage一样
+  ^^事件storage:在localStorage中数据内容发生变化时（新增、减少）触发,
+                用于多个页面共享数据内容，但目前很少应用允许多页面之间的共享
+
+* globalStorage:
+  跨越会话存储数据，担有特定的访问限制
+  首先要指定那些域可以访问该数据，可以通过使用[]标记实现
+  保存：globalStorage["sina.oom"].name = "gzf";
+  获取：var name = globalStorage["sina.oom"].name;
+        var value = globalStorage["sina.oom"].getItem("name");
+
+  删除：globalStorage["sina.oom"].removeItem("name");
+
+
+【浏览器数据库】
+ 内置数据库: WebSQL(移动端支持比较多，但是W3C已经不在维护了) 和 indexDB
+
+ * WebSQL
+   1.创建访问数据库的对象
+    var db = openDatabase("数据库名称","版本号","数据库描述",数据库大小);
+    如果访问不到数据库，就创建一个数据库对象
+  2.使用事务处理
+    db.transaction(function(tx){
+       3.执行数据库操作
+       tx.executeSql(sql,[sql参数1,sql参数2...],success_fn,fail_fn);
+    });
+  4.rows属性:结果集对象
+    * 记录的条数 rows.length
+    * 每条记录遍历rows ,rows.item(index)
+
+
+ * IndexDB
+   * 概念: 存储在本地的NoSQL数据库
+   * 连接:var dbConnect = indexedDB.open(数据库名称, 版本号);
+   * 连接成功: dbConnect.onsuccess = function(e){
+                 idb = e.target.result;
+                 alert("connect success!");
+               };
+   * 连接失败: dbConnect.onerror = function(){
+                 alert("connect fail!");
+               };
+
+   * 版本更新: dbConnect.onupgradeneeded = function(e){
+                 idb = e.target.result;
+                 var tx = e.target.transaction;
+                 var oldVersion = e.oldVersion;
+                 var newVersion = e.newVersion;//为连接数据库的新版本号
+                 alert("version update success!"+ oldVersion + "--->" + newVersion);
+               }
+
+  * 创建数据仓库: 注意，应该放在版本更新的函数里面定义,否则，不更新版本，无法创建数据仓库
+               dbConnect.onupgradeneeded = function(e){
+                    idb = e.target.result;
+                    var name = "user";
+                    var optionalParameters = {
+                        keyPath:"userid",
+                        autoIncrement:false
+                    };
+                    var store = idb.createObjectStore(name,optionalParameters);
+               };
+
+  * 数据库索引
+    * 创建索引
+      createindex(索引名称,索引属性字段名,索引属性值是否唯一)
+    * 利用索引获取数据
+    * 游标与index
+     openCursorIDBKeyRange.only(value)） 只获取指定数据
+     openCursorIDBKeyRange.lowerBuund(value,isOpen)）
+      * 获取最小value，第二个参数用来指定是否排除value本身
+     openCursorIDBKeyRange.upperBuund(value,isOpen)）
+      * 获取最大value，第二个参数用来指定是否排除value本身
+     openCursorIDBKeyRange.buund(value1,value2,isOpen1,isOpen2)）
+      * value1到value2的区间，是否包含value1，是否包含value2
+

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta  charset=utf-8 />
+    <title></title>
+    </head>
+    <body>
+        <script src="DBUtil.js"></script>
+        <script>
+            var dbCon = new DBUtil().connect({
+                baseName:'myDatabase',
+                version:2.0,
+                tableName:'student',
+                cells:[['name',true],['day',false],['address',false]]//字段及索引，是否唯一
+            });
+            //因为onsuccess是异步的，要推迟执行add方法,如果用动作事件触发就不用setTimeout
+            // setTimeout(function(){
+            //     dbCon.add({
+            //     name:'gzf',
+            //     day:'2014-01-30',
+            //     address:'沈阳精神病三院'
+            // });
+            // },100);
+
+            //add
+            // setTimeout(function(){
+            //     dbCon.query('name','gzf',function(data){//利用回调函数，不枉我1天的苦思冥想
+            //         console.log(data);
+            //         //拿到数据，唯我所用
+            //     });
+            // },100);
+
+            setTimeout(function(){
+                dbCon.queryAll(function(data){
+                    console.log(data[0].key);
+                });
+            },1000);
+
+            //delete
+            // setTimeout(function(){
+            //     dbCon.deleteRow(1,function(res){
+            //         console.log(res);//true or false
+            //     });
+            // },100);
+
+
+
+            //new DBUtil().drop('myDatabase');
+        </script>
+    </body>
+</html>

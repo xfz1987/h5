@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" manifest="sample.appcache">
+<head>
+    <meta charset="UTF-8">
+    <title>ddd</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <img src="1.png">
+    <img src="3.png">
+
+    <script>
+        //监控
+        window.onload = function(){
+            window.applicationCache.onupdateready = function(e){
+                console.log(window.applicationCache.status);
+                if(window.applicationCache.status == window.applicationCache.UPDATEREADY){
+                    window.applicationCache.swapCache();
+                    if(confirm('版本更换，是否确认加载？要重新刷新两次')){
+                        window.location.reload();
+                    }
+                }else{
+                    console.log('manifest did not change');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

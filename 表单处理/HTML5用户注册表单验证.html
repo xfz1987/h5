@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>HTML5用户注册表单验证</title>
+	</head>
+
+	<body>
+		<form name="register" onsubmit="return formValid()">
+			<table>
+				<tr>
+					<td>用户名:</td>
+					<td><input type="text" id="username" required pattern="\w{6,18}" autofocus/></td>
+					<td>用户名只能是长度为6-18位的字母、数字、下划线组合</td>
+				</tr>
+				<tr>
+					<td>密码:</td>
+					<td><input type="password" id="pwd" required pattern="\w{6,12}"/></td>
+					<td>密码只能是6-12位的字母、数字、下划线组合</td>
+				</tr>
+				<tr>
+					<td>确认密码:</td>
+					<td><input type="password" id="repwd" required/></td>
+					<td>确认密码必须与密码一致</td>
+				</tr>
+				<tr>
+					<td>电子邮件:</td>
+					<td><input type="email" id="email" required/></td>
+					<td>电子邮件必须是正确格式</td>
+				</tr>
+				<tr>
+					<td>年龄:</td>
+					<td><input type="number" id="age" required min="20" max="30"/></td>
+					<td>年龄只能是20~30岁之间</td>
+				</tr>
+				<tr>
+					<td>手机号码:</td>
+					<td><input type="text" id="phone" required pattern="1[34578]\d{9}"/></td>
+					<td>手机号码必须是正确格式</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>&nbsp;&nbsp;<input type="submit" value="注册"/>&nbsp;&nbsp;<input type="reset" value="重置"/></td>
+					<td></td>
+				</tr>
+			</table>
+		</form>
+		
+		<script>
+			var form = document.forms["register"];
+			var flag = true;
+			form.addEventListener("blur",showMsg,true);
+			function showMsg(event){
+				var event = window.event||event;
+				var target = event.target||event.srcElement;
+				switch(target.id){
+					case "username":
+						if(target.validity.valueMissing){
+							target.parentNode.parentNode.lastElementChild.innerHTML = "用户名不能为空！";
+							target.parentNode.parentNode.lastElementChild.style.color="red";
+							break;
+						}
+						if(target.validity.patternMismatch){
+							target.parentNode.parentNode.lastElementChild.innerHTML = "用户名输入有误！";
+							target.parentNode.parentNode.lastElementChild.style.color="red";
+							break;
+						}		
+						target.parentNode.parentNode.lastElementChild.innerHTML = "OK!";
+						target.parentNode.parentNode.lastElementChild.style.color="green";
+						break;
+					case "pwd":
+						if(target.validity.valueMissing){
+							target.parentNode.parentNode.lastElementChild.innerHTML = "密码不能为空！";
+							target.parentNode.parentNode.lastElementChild.style.color="red";
+							break;
+						}
+						if(target.validity.patternMismatch){
+							target.parentNode.parentNode.lastElementChild.innerHTML = "密码输入有误！";
+							target.parentNode.parentNode.lastElementChild.style.color="red";
+							break;
+						}
+						target.parentNode.parentNode.lastElementChild.innerHTML = "OK!";
+						target.parentNode.parentNode.lastElementChild.style.color="green";
+						break;
+					case "repwd":
+						if(target.validity.valueMissing){
+							target.parentNode.parentNode.lastElementChild.innerHTML = "密码不能为空！";
+							target.parentNode.parentNode.lastElementChild.style.color="red";
+							break;
+						}
+						if(target.value !== document.querySelector("#pwd").value){
+							target.parentNode.parentNode.lastElementChild.innerHTML = "确认密码与密码不一致!";
+							target.parentNode.parentNode.lastElementChild.style.color="red";
+							break;
+						}
+						target.parentNode.parentNode.lastElementChild.innerHTML = "OK!";
+						target.parentNode.parentNode.lastElementChild.style.color="green";
+						break;
+					case "email":
+						if(target.validity.valueMissing){
+							target.parentNode.parentNode.lastElementChild.innerHTML = "电子邮件不能为空！";
+							target.parentNode.parentNode.lastElementChild.style.color="red";
+							break;
+						}
+						if(target.validity.typeMismatch){
+							target.parentNode.parentNode.lastElementChild.innerHTML = "电子邮件格式不正确！";
+							target.parentNode.parentNode.lastElementChild.style.color="red";
+							break;
+						}
+						target.parentNode.parentNode.lastElementChild.innerHTML = "OK!";
+						target.parentNode.parentNode.lastElementChild.style.color="green";
+						break;
+					case "age":
+						if(target.validity.valueMissing){
+							target.parentNode.parentNode.lastElementChild.innerHTML = "年龄不能为空！";
+							target.parentNode.parentNode.lastElementChild.style.color="red";
+							break;
+						}
+						if(target.validity.rangeUnderflow){
+							target.parentNode.parentNode.lastElementChild.innerHTML = "年龄输入太小！";
+							target.parentNode.parentNode.lastElementChild.style.color="red";
+							break;
+						}
+						if(target.value > 30){
+							target.parentNode.parentNode.lastElementChild.innerHTML = "年龄输入太大！";
+							target.parentNode.parentNode.lastElementChild.style.color="red";
+							break;
+						}
+						target.parentNode.parentNode.lastElementChild.innerHTML = "OK!";
+						target.parentNode.parentNode.lastElementChild.style.color="green";
+						break;
+					case "phone":
+						if(target.validity.valueMissing){
+							target.parentNode.parentNode.lastElementChild.innerHTML = "手机号码不能为空！";
+							target.parentNode.parentNode.lastElementChild.style.color="red";
+							flag = false;
+							break;
+						}
+						if(target.validity.patternMismatch){
+							target.parentNode.parentNode.lastElementChild.innerHTML = "手机号码必须是正确格式！";
+							target.parentNode.parentNode.lastElementChild.style.color="red";
+							flag = false;
+							break;
+						}
+						target.parentNode.parentNode.lastElementChild.innerHTML = "OK!";
+						target.parentNode.parentNode.lastElementChild.style.color="green";
+						break;
+				}
+			}
+			function $(id){
+				document.querySelector("#"+id);
+			}
+			function formValid(){
+				if($("username").validity.valid&&$("pwd").validity.valid&&$("repwd").validity.valid&&$("email").validity.valid&&$("age").validity.valid&&$("phone").validity.valid){
+					return true;
+				}else{
+					return false
+				}
+			}
+
+		</script>
+	</body>
+</html>

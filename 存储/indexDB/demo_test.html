@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<button id="check">检查浏览器是否支持indexDB</button>
+	<button id="connect">连接IndexDB</button>
+	<button id="add">新增数据</button>
+	<button id="delete">删除某条数据</button>
+	<button id="query">查询</button>
+	<button id="queryAll">查询所有</button>
+	<button id="update">更新数据</button>
+	<button id="drop">删除数据库</button>
+	
+	<script src="DBUtil_test.js"></script>
+	<script>
+		function $(id){
+			return document.getElementById(id);
+		}
+
+		var dbUtil = new DBUtil(),
+		    dbConn = null;
+
+		//检查浏览器是否支持indexDB
+		$('check').onclick = function(){
+			alert(dbUtil.check() ? '支持' : '不支持');
+		};
+
+		//连接IndexDB
+		$('connect').onclick = function(){
+			dbConn = dbUtil.connect({
+            	baseName: 'rj',
+            	version: 1,
+            	tableName: 'record',
+            	cells:[['source',false],['wordTxt',false],['sendError',false],['time',false]]//字段及索引，是否唯一
+        	}, function(){
+        		alert('Connect db[' + dbUtil.name + '] success! version[' + dbUtil.version + ']');
+        	});
+		};
+
+		//新增数据
+		$('add').onclick = function(){
+			var arr = [
+				{source: 'sys',wordTxt: '111111',sendError: '0', time: '20170520 11:00:00'},
+				{source: 'cust',wordTxt: '222222',sendError: '0', time: '20170520 11:05:00'},
+				{source: 'sys',wordTxt: '333333',sendError: '0', time: '20170522 11:00:00'},
+				{source: 'cust',wordTxt: '444444',sendError: '0', time: '20170523 11:00:00'},
+				{source: 'cust',wordTxt: '555555',sendError: '0', time: '20170524 11:00:00'}
+			];
+			for(var i=0,len=arr.length;i<len;i++){
+				dbUtil.add(arr[i], function(res){
+					console.log(res);
+				});
+			}
+		};
+
+		//删除某条数据
+		$('delete').onclick = function(){
+			var deleteId = '2';
+			dbUtil.deleteRow(deleteId, function(res){
+				alert('Delete row By id['+deleteId+']' + (res ? ' sucess' : ' fail'));
+			});
+		};
+
+		//查询
+		$('query').onclick = function(){
+			dbUtil.query('wordTxt', '333333', function(res){
+				console.log(res);
+				for(var i=0,len=res.length;i<len;i++){
+					console.log(res[i].source);
+				}
+			});
+		};
+
+		//查询所有
+		$('queryAll').onclick = function(){
+			dbUtil.queryAll(function(res){
+				console.log(res);
+			});
+		};
+
+		//更新数据
+		$('update').onclick = function(){
+			dbUtil.update('wordTxt', '333333', 'sendError', '2');
+		};
+
+		//删除数据库
+		$('drop').onclick = function(){
+			dbUtil.drop('rj');
+		};
+
+
+
+	</script>
+</body>
+</html>

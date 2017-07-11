@@ -1,0 +1,103 @@
+HTML5概述：
+ * 声明：<!DOCTYPE html>
+ * HTML CSS JAVASCRIPT关系：
+   * HTML - 素描
+   * CSS  - 彩色
+   * JAVASCRIPT - 动画
+视频处理：
+ * 在HTML5中如何使用视频处理：
+   * 概述：
+     * 目前HTML页面中播放视频，使用Flash技术实现
+       * 浏览器原生不支持Flash，使用ActiveX组件
+       * Flash技术比较耗资源，性能不好
+       * 移动智能操作系统不支持Flash
+     * HTML5提供视频播放功能：
+       * 提供video元素实现视频处理
+       * 性能比较Flash好很多
+       * 对移动智能操作系统支持很好
+     * video元素浏览器兼容性不是很好
+       * IE浏览器(8或更早版本)不支持
+     * video元素支持的视频格式：
+       * OGG格式：Theora 视频和 Vorbis 音频解码器，扩展名为".ogg"
+       * MP4格式：H.264 视频和 AAC 音频解码器，扩展名为".mp4"
+       * WebM格式：VP8视频和 Ogg Vorbis 音频解码器，扩展名为".webm"
+   * 如何使用video元素：
+     * 注意：
+       * HTML页面使用的声明必须是HTML5版本
+     * 使用source元素为浏览器提供备选视频格式
+       * source元素必须要定义在video元素中
+       * source元素使用src属性指定载入视频
+       * 使用source元素时，video元素不需要要指定src属性
+       * 一个video元素中允许使用多个source元素
+     * 当浏览器不支持video元素时，可以在video元素中使用文本作为提示
+	<video>
+	    <source src="视频路径.OGG"/>
+	    <source src="视频路径.MP4"/>
+	    视频不能播放
+        </video>
+
+   * video元素的特有属性：
+     * width:指定载入视频的宽度
+     * height:指定载入视频的高度
+     * src:指定载入视频的路径（绝对路径或相对路径）
+     * autoplay属性：表示当前视频自动播放（没有值，直接调用）
+     * controls属性：表示当前视频显示控制按钮（没有值，直接调用）
+     * loop属性：表示当前视频允许重复播放（没有值，直接调用）
+     * poster属性：该属性指定一个URL，表示视频播放之前，显示一张图片
+     * preload:  默认值
+	    -none:不缓存视频，节省流量（网络慢就卡了）
+	    -auto:默认值，要求浏览器尽可能快地下载视频（也就是缓存）
+	    -metadata:播放之前，只加载视频的高度、宽度及其他信息
+
+     <video width="300" height="300" src="视频路径.MP4" poster="图片路径" autoplay controls loop></video>
+
+ * 通过编程方式实现视频处理：
+   * 事件：
+     * play事件：开始播放视频时触发
+     * pause事件：暂停播放视频时触发
+     * ended事件：视频播放完毕时触发
+     * canplay事件：当前视频可播放时触发
+     * error事件：当前视频播放出错时触发
+     * progess:用于更新媒体的下载进度，会周期性的触发
+     * canplaythrough:当整个媒体下载完毕时，触发
+
+   * 方法：
+     * play( )
+     * pause( ) 
+      window.onload = function(){
+          var myMedia = document.querySelector("#media");
+	  myMedia.addEventListener("play",onPlay,false);
+	  myMedia.addEventListener("pause",onPause,false);
+      }
+      function onPlay(){
+          var adv0 = document.querySelector("#adv");
+          adv0.style.display = "none";
+      }
+      function onPause(){
+          var adv0 = document.querySelector("#adv");
+	   adv0.style.display = "block";
+      }
+
+   * 属性：
+     * 用作判断：
+       * paused：判断当前视频是否暂停或播放状态，返回true
+       * ended：判断当前视频是否播放完毕，返回true
+     * 与视频时长：
+       * duration：获取当前视频的时长，以秒位单位
+       * currentTime：获取或设置当前视频的播放位置(时间点: 常见:视频播放几分钟，然后收费)
+
+音频处理：
+ * 在HTML5中如何使用音频处理：
+   * 概述：与video元素一致
+   * audio元素
+     * src属性：指定载入音频文件的路径
+     * 包含source元素
+   * audio元素的属性：与video元素一致
+ * 通过编程方式实现音频处理：
+   * 事件：
+     * play
+     * pause
+     * ended
+   * 方法：
+     * play()
+     * pause()

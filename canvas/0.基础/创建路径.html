@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>创建路径</title>
+	</head>
+
+	<body>
+		<canvas id="drawing" width="400" height="400">A drawing of something</canvas>
+
+		
+		<script>			
+			var canv = document.querySelector("#drawing");
+			if(canv.getContext){
+				var context = canv.getContext("2d");
+				context.strokeStyle = "red";				
+				context.fillStyle = "green";
+				
+				/*矩形*/
+				context.beginPath();
+				context.rect(10,10,100,100);
+				context.stroke();
+
+				context.beginPath();
+				context.rect(120,10,100,100);
+				context.fill();
+
+				context.beginPath();
+				context.rect(230,10,100,100);
+				context.stroke();
+				context.fill();
+
+				/*圆形*/
+				context.beginPath();
+				context.arc(55,170,50,0,Math.PI*3/2);
+				context.stroke();
+
+				context.beginPath();
+				context.arc(165,170,50,0,Math.PI*3/2);
+				context.fill();
+
+				context.beginPath();
+				context.arc(275,170,50,0,Math.PI*3/2);	
+				context.fill();
+				context.stroke();
+
+				/*使用closePath*/
+				context.beginPath();
+				context.arc(55,280,50,0,Math.PI*3/2);
+				context.closePath();
+				context.stroke();
+
+				context.beginPath();
+				context.arc(165,280,50,0,Math.PI*3/2);
+				context.closePath();
+				context.fill();//没有区别
+
+				context.beginPath();
+				context.arc(275,280,50,0,Math.PI*3/2);	
+				context.fill();
+				context.closePath();
+				context.stroke();
+
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        var balls = [];
+        var canvas = document.getElementById('canvas');
+        var ctx = canvas.getContext('2d');
+
+        window.onload = function(){
+            canvas.width = 400;
+            canvas.height = 400;
+            ctx.strokeStyle = '#000';
+            ctx.strokeRect(0,0,400,400);
+            ctx.stroke();
+
+            for(var i=0;i<8;i++){
+                var ball = {x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*20+10};
+                balls.push(ball);
+            }
+
+            draw();
+            canvas.addEventListener('click',detect);
+        }
+
+        function draw(x,y){
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            for(var i=0;i<balls.length;i++){
+                ctx.beginPath();
+                ctx.arc(balls[i].x,balls[i].y,balls[i].r,0,Math.PI*2);
+
+                //判断该坐标是否在当前绘制的路径内
+                if(ctx.isPointInPath(x,y)){
+                    ctx.fillStyle = 'red';
+                }else{
+                    ctx.fillStyle = '#058';
+                }
+                ctx.fill();
+            }
+        }
+
+        function detect(e){
+            /*getBoundingClientRect获取元素位置。用于获得页面中某个元素的左，上，右和下分别相对浏览器视窗的位置。
+              getBoundingClientRect是DOM元素到浏览器可视范围的距离（不包含文档卷起的部分）。
+              该函数返回一个Object对象，该对象有6个属性：top,lef,right,bottom,width,height；
+              这里的top、left和css中的理解很相似，
+              width、height是元素自身的宽高，
+              但是right是指元素右边界距窗口最左边的距离，
+              bottom是指元素下边界距窗口最上面的距离。
+            */
+            var bounding = canvas.getBoundingClientRect() || getClientRect();
+            var x = e.clientX - bounding.left
+            var y = e.clientY - bounding.top;
+
+            draw(x,y);
+        }
+
+    </script>
+</body>
+</html>

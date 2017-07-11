@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <button id="click-item">点我</button>
+    <p id="result-item"></p>
+    <script>
+        var btn = document.getElementById('click-item'),
+            res = document.getElementById('result-item');
+        btn.onclick = function(){
+            res.innerHTML = 'clicked';
+            try{
+                //部署到服务器上才有用，因为同源策略
+                history.pushState({username:'h5'},'user account','user.html');
+            }catch(e){
+                console.log(e);
+            }
+
+        }
+    </script>
+</body>
+</html>

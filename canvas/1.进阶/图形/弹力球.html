@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>弹力球</title>
+	</head>
+
+	<body onload="updateTime()">
+		<canvas id="drawing" width="400" height="200" style="border:1px solid red;">A drawing of something</canvas>
+
+		<script>
+			var canvas;
+			var x=10,y=10,r=10,dx=2,dy=3;//小球从(0,0)开始移动，横向步长2，纵向步长3
+			function draw(){
+				canvas.clearRect(0,0,drawing.width,drawing.height);
+				if(x + r > drawing.width || x -r < 0){
+					dx *= -1;
+				}
+				if(y + r > drawing.height || y - r < 0){
+					dy *= -1;
+				}
+				x += dx;
+				y += dy;
+				drawArc(x,y,r);
+			}
+
+			function drawArc(x,y,r){
+				canvas.fillStyle = "red";
+				canvas.beginPath();
+				canvas.arc(x,y,r,0,Math.PI*2);
+				canvas.fill();
+			}
+			
+			window.onload = function(){
+				var drawing = document.querySelector("#drawing");
+				if(drawing.getContext){
+					canvas = drawing.getContext("2d");	
+					setInterval(draw,20);
+				}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>   
+	<head>   
+		<meta charset="utf-8"/>   
+		<title>game</title>   
+	</head>   
+	<body>   
+		<canvas id="canvas" width="512" height="480" style="float:left"></canvas>
+		<button onclick="replay()" style="float:left;background:#e4393c;width:100px;height:40px;">replay</button>
+		<p>
+		<h1 id="myH" style="color:red;">榜上有名</h1>
+		<div id="result"></div>
+		<script type="text/javascript" src="move.js"></script>
+		<script>
+			function replay(){
+				location.reload(); 
+			}
+			
+			for(var i=0,arr=[],key,value,len=localStorage.length;i<len;i++){
+				key = localStorage.key(i);
+				value = localStorage.getItem(key);
+				if(key.indexOf("$:") == 0){
+					arr.push(key+"="+value);
+				}
+			}
+			
+			/*value从高到低排序*/
+			var array =  arr.sort(function(a,b){
+			                       return parseInt(b.substring(b.indexOf("=")+1))-parseInt(a.substring(a.indexOf("=")+1));	
+								  });
+			console.log(array);
+			
+			array = array.length<=5?array:array.slice(0,5); 
+		
+			var myTable = "<table border='1'><tr><th>姓名</th><th>秒数</th></tr>";
+			for(var i=0,len=array.length;i<len;i++){
+				myTable += "<tr><td>"+array[i].substring(array[i].indexOf(":")+1,array[i].indexOf("="))+"</td>"+
+				            "<td>"+array[i].substring(array[i].indexOf("=")+1)+"</td></tr>";
+			}
+			myTable += "</table>";
+
+			document.getElementById("result").innerHTML = myTable;
+		
+		</script>
+	</body>   
+</html> 

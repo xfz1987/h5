@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>幸运转盘</title>
+    <style>
+        .lotteryContainer{text-align: center;}
+        .lotteryContainer button{width: 288px;height: 3em;border: 1px solid #fafafa;margin: 10px 0;border-radius: 8px;outline: none;}
+        .lotteryContainer button:hover{background: #eee;}
+    </style>
+</head>
+<body>
+    <div class="lotteryContainer" id="lotteryContainer">
+        <canvas id="loteryCanvas" width="500" height="500">
+            您的浏览器不支持Canvas
+        </canvas><br>
+        <button id="btn-click">加载中请稍后...</button>
+    </div>
+    <script>
+
+        window.onload = function(){
+            window.requestAnimFrame = (function () {
+                return window.requestAnimationFrame ||
+                        window.webkitRequestAnimationFrame ||
+                        window.mozRequestAnimationFrame ||
+                        window.oRequestAnimationFrame ||
+                        window.msRequestAnimationFrame ||
+                        function (callback) {
+                            window.setTimeout(callback, 1000 / 60)
+                        }
+            })();
+
+
+            //加载圆盘和指针
+            var asImgReady = false,
+                pinImgReady = false,
+                asImg = new Image(),
+                pinImg = new Image(),
+                isClicked = false;
+
+            asImg.src = 'images/as.png';
+            asImg.onload = function(){
+                asImgReady = true;
+                if(pinImgReady){//问问下一张图片有没有加载完毕
+                    initLottery();
+                }
+            };
+            pinImg.src = 'images/pin.png';
+            pinImg.onload = function(){
+                pinImgReady = true;
+                //如果两张图片同时加载完成后，改变按钮的相关处理
+                if(asImgReady){//问问上一张图片有没有加载完毕
+                    initLottery();
+                }
+                /*只有一个判断能生效，所以两张图片都要询问对方是否加载完成*/
+            };
+
+
+            function initLottery(){
+                //绘制Canvas
+                var canvas = document.getElementById('loteryCanvas'),
+                    ctx = canvas.getContext('2d'),
+                    cw = canvas.width,//500;
+                    ch = canvas.height,//500
+                    asw = asImg.width,//圆盘的宽
+                    ash = asImg.height,//圆盘的高
+                    pw = pinImg.width,//指针的宽
+                    ph = pinImg.height;//自侦的高
+
+                //设置画布的位移，使其旋转轴心为画布的中心
+                ctx.translate(cw/2,ch/2);//设置画布的位移，使其旋转轴心为画布的中心
+                ctx.drawImage(asImg,-asw/2,-asw/2);//将图片的中心移动到画布的中心
+                ctx.drawImage(pinImg,-pw/2+10,-ph/2-10);
+
+                var btn = document.getElementById('btn-click');
+                btn.innerHTML = '开始抽奖';
+                btn.style.color = 'red';
+
+                btn.addEventListener('click',starting,false);
+
+                function starting(){
+                    btn.innerHTML = '正在抽奖';
+                    btn.style.color = 'blue';
+                    var angle = 0;
+                    var ti = 5;
+                    var isAdd = true;
+
+                    if(!isClicked){
+                        isClicked = true;
+                        loop();
+                    }
+
+                    function loop(){
+                        update();
+                        if(ti <= 0){
+                            btn.innerHTML = '开始抽奖';
+                            btn.style.color = 'red';
+                            isClicked = false;
+                            isAdd = true;
+                            return;
+                        }
+                        requestAnimFrame(loop);
+                    }
+
+                    function update(){
+                        ctx.clearRect(-cw/2,-ch/2,cw,ch);
+                        ctx.drawImage(asImg,-asw/2,-asw/2);//将图片的中心移动到画布的中心
+
+                        if(isAdd && ti<15){
+                            ti += 0.1;
+                        }else{
+                            isAdd = false;
+                            ti -= 0.03;
+                        }
+
+                        angle += ti * Math.PI/180;
+                        ctx.rotate(angle);//是顺时针
+                        ctx.drawImage(pinImg,-pw/2+10,-ph/2-10);//圆盘不动，指针动
+                        ctx.rotate(-angle);//全部转回去
+
+
+                    }
+
+                }
+
+
+            }
+
+        };
+
+
+    </script>
+</body>
+</html>

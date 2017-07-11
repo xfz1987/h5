@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>文字</title>
+	</head>
+
+	<body>
+	<h3>第四个参数 [maxlen]，，，所以会有被压缩的风险</h3>
+		<canvas id="drawing" width="800" height="800">A drawing of something</canvas>
+
+		<script>
+			var canv = document.querySelector("#drawing");
+			if(canv.getContext){
+				var context = canv.getContext("2d");
+				context.font="bold 40px Arial";
+    			var g=context.createLinearGradient(200,0,400,0);
+    			g.addColorStop(0.0,'red');
+    			g.addColorStop(1.0,'green');
+    			context.fillStyle=g;
+    			context.fillText('We are family',200,200);
+    			context.strokeStyle='blue';
+    			context.strokeText('We are family',200,400);
+			}
+		</script>
+	</body>
+</html>

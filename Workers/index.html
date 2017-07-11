@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>WebWorker使用</title>
+	</head>
+
+	<body>
+		<!--
+		   完成一个计数器的功能
+		   1.开始计数 按钮
+		   2.停止计数 按钮
+		   3.Worker文件用于完成计数的功能
+		-->
+		<h1 align="center">计数器</h1>
+		<hr size="1" color="red"/>
+		<div id="result" style="width:100px;height:100px;border:1px solid red;"></div>
+		<button onclick="startNum()">开始</button>
+		<button onclick="endNum()">停止</button>
+		
+		
+		<script>
+		    var div = document.getElementById("result");
+            var worker;
+			function startNum(){
+                //检测浏览器是否支持Worker
+				if(typeof(Worker) !== undefined){
+					worker = new Worker("worker.js");
+					worker.addEventListener("message",function(e){
+						div.innerHTML = e.data;
+					},false);
+				}else{
+					div.innerHTML = "IE已死，请更换浏览器!";
+				}				
+			}
+
+			function endNum(){
+				worker.terminate();
+			}
+
+		</script>
+		
+
+	</body>
+</html>

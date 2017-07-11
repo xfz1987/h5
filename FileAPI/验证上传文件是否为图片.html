@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<!--File extends blob(size,type)-->
+<body>
+选择文件:
+<input type="file" id="file" multiple/><br><!--multiple可以上传多个文件-->
+<input type="button" onclick="fileUpload()" value="验证是否为图片"/><br>
+<img src="blob:null/013439b4-45b3-463f-84b8-cb1154e2198c" alt="">
+<script>
+  function fileUpload(){
+    var file;
+    for(var i=0;i<document.getElementById("file").files.length;i++){
+      file = document.getElementById("file").files[i];
+      if(!/image\/\w+/.test(file.type)){
+        alert("不是图片");
+      }else{
+        alert("是图片");
+      }
+
+    }
+  }
+</script>
+</body>
+</html>

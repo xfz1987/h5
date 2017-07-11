@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /*需要与服务器配合使用，或者用firefox，利用canvas存储*/
+        var src = '1.jpg';
+
+        function set(key){
+            var img = document.createElement('img');
+            img.src = src;
+            img.addEventListener('load',function(){
+                var imgCanvas = document.createElement('canvas'),
+                    ctx = imgCanvas.getContext('2d');
+                imgCanvas.width = this.width;
+                imgCanvas.height = this.height;
+                ctx.drawImage(this,0,0,this.width,this.height);
+                //用data url的形式取出
+                var imgAsDataURL = imgCanvas.toDataURL();
+                console.log(typeof imgAsDataURL);
+                //保存到本地存储中
+                try{
+                    localStorage.setItem(key,imgAsDataURL);
+                }catch(e){
+                    console.log('save failed:' + e);
+                }
+            },false);
+        }
+
+        function get(key){
+            var val = localStorage.getItem(key);
+            if(val){
+                var imgObj = document.createElement('img');
+                imgObj.src = val;
+                document.body.appendChild(imgObj);
+            }
+        }
+
+        set('myImg');
+        //get('myImg');
+
+    </script>
+</body>
+</html>

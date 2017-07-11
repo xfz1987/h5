@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>   
+	<head>   
+		<meta charset="utf-8"/>   
+		<title>game</title>   
+	</head>   
+	<body>   
+		<canvas id="canvas" width="512" height="480" style="float:left"></canvas>
+		<button onclick="replay()" style="float:left;background:#e4393c;width:100px;height:40px;">replay</button>
+		<p>
+		<h1 id="myH" style="color:red;">能成为男人么？</h1>
+		<div id="result"></div>
+		<script type="text/javascript" src="move.js"></script>
+		<script>
+			function replay(){
+				location.reload(); 
+			}
+			
+
+			while(true){
+				var input = prompt("请输入用户名:");
+				if(input != "" && input != null && !/^\s*$/.test(input)){					 
+					document.getElementById("myH").innerHTML += "【" + input + "】"; 
+					game.startGame();
+					break;
+				}	
+			}
+
+			
+		
+		</script>
+	</body>   
+</html> 

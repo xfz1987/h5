@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<!--File对象 extends blob(size,type)对象-->
+<!--FileReader对象:把文件内容读入内存
+    readAsBinaryString:将文件读取成二进制数据
+    readAsText:将文件读取成文本数据
+    readAsDataURL:读取文件的url信息
+    readArrayBuffer:读取数组的队形
+    abort:中断读取操作
+-->
+<!--事件
+    onabort
+    onerror
+    onloadstart
+    onloadend
+    onload
+    onprogress
+-->
+<body>
+选择文件:
+<input type="file" id="file" multiple/><br><!--multiple可以上传多个文件-->
+<input type="button" onclick="showFileInfo()" value="显示文件信息"/><br>
+文件名称:  <span id="name"></span><br>
+文件大小:  <span id="size"></span><br>
+文件类型:  <span id="type"></span>
+<hr><hr>
+<p>
+  <input type="file" id="file2"/>
+  <input type="button" value="读取头像" onclick="readAsDataURL()"/>
+  <input type="button" value="读取二进制数据" onclick=""/>
+  <input type="button" value="读取文本文件" onclick="readerAsText()"/>
+</p>
+<div id="content"></div>
+<script>
+  function showFileInfo(){
+    var file;
+    for(var i=0;i<document.getElementById("file").files.length;i++){
+      file = document.getElementById("file").files[i];
+      document.getElementById("name").innerHTML = file.name;
+      document.getElementById("size").innerHTML = file.size;
+      document.getElementById("type").innerHTML = file.type;
+    }
+  }
+
+  var content = document.getElementById("content");
+  var file2 = document.getElementById("file2");
+  function readAsDataURL(){
+    var curfile = file2.files[0];
+    var reader = new FileReader();
+    reader.readAsDataURL(curfile);
+    reader.onload = function(){
+      var img = document.getElementById("content");
+      img.innerHTML = "<img src='"+ this.result + " '>";
+    }
+  }
+
+  function readerAsText(){
+    var curfile = file2.files[0];
+    var reader = new FileReader();
+    reader.readAsText(curfile);
+    reader.onload = function(e){
+      var img = document.getElementById("content");
+      img.innerHTML = this.result;
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>historyAPI与loacalStorage实现分页，浏览器后退功能</title>
+</head>
+<body>
+    <!-- 可以使用浏览器后退功能 -->
+    <script>
+        var pageIndex = window.localStorage.pageIndex || 0;
+        function makeRequest(pageIndex){
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = stateChange;
+            request.open('get','url?page='+pageIndex + '&limit=4',true);
+            request.send(null);
+
+            function stateChange(){
+                if(request.readyState !==4){
+                    return;
+                }
+                if(request.status == 200 && request.status <300 || request.status == 304){
+                    var data = JSON.parse(request.responseText);
+                    renderPage(data);
+                }
+            }
+
+            function renderPage(data){
+                //对数据进行渲染
+            }
+
+            function nextPage(){
+                window.localStorage.pageIndex = ++pageIndex;
+                makeRequest(pageIndex);
+                //存放当前页面的数据
+                window.history.pushState({page:pageIndex},null,window.location.href);
+            }
+
+            //监听popstate事件
+            window.addEventListener('popstate',function(e){
+                var page = 0;
+                //由于第一页没有pushState，所以返回到第一页的时候是没有数据的
+                if(e.state != null){
+                    page = e.state.page;
+                }
+                makeRequest(page);
+                window.localStorage.pageIndex = page;
+            });
+
+        }
+    </script>
+</body>
+</html>

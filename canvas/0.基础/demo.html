@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="canvas" width="1024" height="768" style="border:1px solid #aaa;display:block;margin:20px">
+        该浏览器不支持canvas
+    </canvas>
+
+    <script>
+        window.onload = function(){
+            var canvas = document.getElementById('canvas');
+            if(canvas.getContext('2d')){
+                var ctx = canvas.getContext('2d');
+                //canvas是基于状态变化来进行绘图的
+                //1.画直线
+                ctx.moveTo(100,100);//状态，将笔尖设置位置
+                ctx.lineTo(400,400);//状态，要从笔尖位置连接到当前位置
+                ctx.lineTo(200,400);//状态
+                ctx.lineTo(100,100);//状态,与笔尖开始的坐标首尾相接，就形成了一个多边形
+                ctx.lineWidth = 5;//状态，设置线的宽度
+                ctx.strokeStyle = '#e8393c';//状态，设置绘制的颜色
+                ctx.stroke();//这才是真正的绘制
+                ctx.fillStyle = 'rgba(0,0,0,.6)';
+                ctx.fill();
+
+                //因为是基于状态的绘制，所以想另画定西，需要使用路径
+                ctx.beginPath();
+                ctx.moveTo(500,100);
+                ctx.lineTo(600,200);
+                ctx.stroke();
+
+
+            }else{
+                alert('该浏览器不支持canvas');
+            }
+        }
+    </script>
+</body>
+</html>

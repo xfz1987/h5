@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title> HTML5表单新增元素 </title>
+  <meta charset="utf-8" />
+  <style>
+	table{border:1px solid black;border-collapse:collapse;}
+	th,td{border:1px solid  black;padding:5px;}
+  </style>
+  <script>
+	function txtRange_change(){
+		document.querySelector("#r_txt").innerHTML = document.frm.txtRange.value;
+	}
+
+	function getValue(){
+		var frm = document.frm;
+		//1、获取txtColor控件的value
+		var value = document.frm.txtColor.value;
+		console.log("txtColor:" + value);
+		//2、获取日期类型控件数据
+		var date =frm.txtDate.value;
+		var week = frm.txtWeek.value;
+		var month = frm.txtMonth.value;
+		console.log("Date:"+date);
+		console.log("Week:"+week);
+		console.log("Month:"+month);
+
+		//3、获取日期与时间(本地)
+		var datetime = frm.txtDatetime.value;//日期与时间
+		var datetimeLocal = frm.txtDatetimeLocal.value;//本地
+
+		window.alert("Datetime:"+datetime);
+		console.log("datetimeLocal:"+datetimeLocal);
+
+		//4、获取 txtNewEmail的值
+		console.log("txtNewEmail:"+frm.txtNewEmail.value);
+	}
+  </script>
+ </head>
+
+ <body>
+    <form name="frm" oninput="x.value=parseInt(a.value)+parseInt(b.value)">
+	<table>
+		<tr>
+			<th>名称</th>
+			<th>控件</th>
+			<th>说明</th>
+		</tr>
+		<tr>
+			<td>Email类型</td>
+			<td>
+				<input type="email" name="txtEmail" id="txtEmail" />
+			</td>
+			<td>要求用户输入Email类型数据，提交表单时，会自动验证，<span style="color:red;">存在bug,只要包含 @ 就可以<span></td>
+		</tr>
+		<tr>
+			<td>Search类型</td>
+			<td>
+				<input type="search" id="txtSearch" name="txtSearch" />
+			</td>
+			<td>
+				搜索文本框，与text相似，特点：数据允许被快速删除
+			</td>
+		</tr>
+		<tr>
+			<td>URL类型</td>
+			<td>
+				<input type="url" name="txtUrl" />
+			</td>
+			<td>
+				对用户输入的数据进行Url检测，提交表单时，会自动验证
+				检测<span style="color:red;">存在bug，只要包含http://即可，<span>
+			</td>
+		</tr>
+		<tr>
+			<td>tel类型</td>
+			<td>
+				<input type="tel" name="txtTel" />
+			</td>
+			<td>
+				<span style="color:red;">注意：只对移动终端有效，会显示出拨号键盘,通过该键盘接收用户录入的数据</span>
+			</td>
+		</tr>
+		<tr>
+			<td>number类型</td>
+			<td>
+				<input type="number" min="18" max="80" step="1" name="txtNumber" />
+			</td>
+			<td>
+				只能接收数字，min表示数字范围下限值，max表示数字范围上限值，step表示步长<span style="color:red;">(默认1)</span>
+			</td>
+		</tr>
+		<tr>
+			<td>range范围类型</td>
+			<td>
+				<input type="range" name="txtRange" min="1" max="10" step="1" value="5" onchange="txtRange_change()" />
+				&nbsp;<label id="r_txt" style="color:green;">5</label>
+			</td>
+			<td>
+				提供一个滑块工具给用户去选择指定范围内的数值
+			</td>
+		</tr>
+		<tr>
+			<td>color颜色类型</td>
+			<td>
+				<input type="color" name="txtColor" />
+			</td>
+			<td>
+				弹出一个调色板提供给用户选取颜色
+			</td>
+		</tr>
+		<tr>
+			<td>date日期类型</td>
+			<td>
+				<input type="date" name="txtDate" />
+			</td>
+			<td>
+				弹出日历框供用户选择，用户可以精确选择到某一天
+			</td>
+		</tr>
+		<tr>
+			<td>week周类型</td>
+			<td>
+				<input type="week" name="txtWeek" />
+			</td>
+			<td>
+				弹出一个日历控件，用户能够选取一个星期的时间
+			</td>
+		</tr>
+		<tr>
+			<td>month月类型</td>
+			<td>
+				<input type="month" name="txtMonth" />
+			</td>
+			<td>
+				弹出一个日历控件，允许用户选择一个月
+			</td>
+		</tr>
+		<tr>
+			<td>datetime日期与时间</td>
+			<td>
+				<input type="datetime" name="txtDatetime" />
+			</td>
+			<td>
+				通过箭头选取日期时间<span style="color:red;">(Safari支持)</span>
+			</td>
+		</tr>
+		<tr>
+			<td>datetime-local<br/>本地日期与时间类型</td>
+			<td>
+				<input type="datetime-local" name="txtDatetimeLocal" />
+			</td>
+			<td>
+				弹出一个日历控件，允许用户选择年月日，通过按钮选取时间
+			</td>
+		</tr>
+		<tr>
+			<td>datalist</td>
+			<td>
+				<datalist id="mylist">
+					<option value="010" label="北京市"/>
+					<option value="021" label="上海市"/>
+					<option value="022" label="大连市"/>
+				</datalist>
+				<input type="text" name="address" list="mylist" />
+			</td>
+			<td>
+				预设内容，并不显示在html中，需要与input组合使用,类似select
+				<label style="color:blue;">能够将数据与结构分类，但没人认同</label>
+			</td>
+		</tr>
+		<tr>
+			<td>progress</td>
+			<td>
+				<progress max="100" value="20"></progress>
+				
+			</td>
+			<td>
+				进度条[max:声明任务完成后达到的值，value:任务执行的进度]
+				<label style="color:red;">不同浏览器，效果不同</label>
+			</td>
+		</tr>
+		<tr>
+			<td>meter</td>
+			<td>
+				<meter min="0" max="100" value="10" low="20" high="90" optimum="70" title="10"></meter>	
+			</td>
+			<td>
+				刻度[min、max:设置范围，value:确定测量的值，low、high:将范围划分为不同位置，optimum:设置最佳位置]
+			</td>
+		</tr>
+		<tr>
+			<td>output</td>
+			<td>
+				<input type="range" value="50" id="a"/>
+				+ <input type="number" value="50" id="b"/><br/>
+				= <output name="x" for="a b">100</output>
+			</td>
+			<td>
+				显示表单元素处理的结果<label style="color:red;">(在form处添加oninput事件处理函数)</label>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" style="background:black;"></td>
+		</tr>
+		<tr>
+			<td colspan="3" align="center" style="color:green;">新增属性</td>
+		</tr>
+		<tr>
+			<td>placeholder</td>
+			<td>
+				<input type="text" name="txtUsername" placeholder="请输入用户名称" />
+			</td>
+			<td>
+				默认显示内容<label style="color:red;">((与value相比，样式不同)</label>
+			</td>
+		</tr>
+		<tr>
+			<td>multiple</td>
+			<td>
+				<input type="email" name="txtNewEmail" multiple />
+			</td>
+			<td>
+				允许用户输入多个值，但必须使用',' 进行分割
+				<label style="color:red;">(email,file等)</label>
+			</td>
+		</tr>
+		<tr>
+			<td>autofocus</td>
+			<td>
+				<input type="text" name="txtFocus" autofocus />
+			</td>
+			<td>
+				网页加载时，控件自动获取焦点
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" align="center" style="color:green;">表单验证</td>
+		</tr>
+		<tr>
+			<td>required</td>
+			<td>
+				<input type="text" name="txtAddress" required/>
+			</td>
+			<td>
+				要求当前元素必须录入值，否则表单不允许提交
+			</td>
+		</tr>
+		<tr>
+			<td>pattern</td>
+			<td>
+				<input type="text" name="txtPhone" pattern="13\d{9}"/>
+			</td>
+			<td>
+				自定义正则表达式验证当前控件中的值，如果值不满足验证规则，表单则无法提交<label style="color:red;">（注意:只写内容，不写//，不能验证为空）</label>
+			</td>
+		</tr>
+		<tr>
+			<td>min、max</td>
+			<td>
+				<input type="text" name="txtPhone" min="1" max="10"/>
+			</td>
+			<td>
+				最大值、最小值<label style="color:red;">（应用场景:number、date、range）</label>
+			</td>
+		</tr>
+		<tr>
+			<td>minlength、maxlength</td>
+			<td>
+				<input type="text" name="txtPhone" minlength="5" maxlength="10"/>
+			</td>
+			<td>
+				限定可以输入的最小\最大字符数<label style="color:red;">（注意:规范中没有minlength属性，但有的浏览器支持该属性，SB官方）</label>
+			</td>
+		</tr>
+		<tr>
+			<td>validity</td>
+			<td></td>
+			<td>
+				1.使用VilidityState对象描述指定表单元素的有效状态（用于验证状态的使用）<br/>
+				2.VilidityState提供了一系列属性，这些属性代表指定元素的有效状态<br/>
+				3.元素控件.validity.属性名称
+			</td>
+		</tr>
+		<tr>
+			<td>novalidate</td>
+			<td>
+				&lt;form novalidate&gt;
+			</td>
+			<td>
+				form使用该属性以禁止表单验证(在提交时，不验证form或input域)<br/>
+				<label style="color:red;">(但该属性并不能上js自定义的表单验证方式失效)</label>
+			</td>
+		</tr>
+		<tr>
+			<td>formnovalidate</td>
+			<td>
+				&lt;input type="submit" formnovalidate&gt;
+			</td>
+			<td>
+				不验证input域，formnovalidate会覆盖&lt;form&gt;元素的novalidate属性，
+				<label style="color:red;">（注意:必须与type="submit"一起使用）</label>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" align="center">
+				<input type="submit" value="提交" />
+				<input type="button" value="取值" onclick="getValue()" />
+			</td>
+		</tr>
+	</table>	
+	</form>
+	<div style="background:silver">
+		<input type="text" form="frm"/> 控件的奇葩属性:form（将编写在表单外的控件添加到某一个表单中，form="表单的id值"
+		<label style="color:red;">没啥用</label>
+	</div>
+ </body>
+</html>

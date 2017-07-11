@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="content-type" type="text/html" charset="utf-8"/>
+		<title>自定义调色器</title>
+	</head>
+
+	<body>
+		<div id="myColor" style="width:100px;height:100px;border:1px solid black;float:left;margin-right:10px;background:#000;"></div>
+		<div id="inputs" style="float:left;margin-top:10px;">
+			<label style="color:red;">红</label><input type="range" id="r" min="0" max="255" step="1" value="0"/><br/>
+			<label style="color:green;">绿</label><input type="range" id="g" min="0" max="255" step="1" value="0"/><br/>
+			<label style="color:blue;">蓝</label><input type="range" id="b" min="0" max="255" step="1" value="0"/><br/>
+		</div>
+	</body>
+	<script>
+		var inputs = document.querySelector("#inputs");
+		var r=0,g=0,b=0;
+		inputs.addEventListener("change",changeCol,false);
+		function changeCol(){
+			var event = window.event||event;
+			var target = event.target||event.srcElement;
+			switch(target.id){
+				case "r":
+					r = target.value;
+					break;
+				case "g":
+					g = target.value;
+					break;
+				case "b":
+					b = target.value;
+					break;
+			}
+			document.querySelector("#myColor").style.background = "rgb("+ r + ","+ g + "," +b +  ")";
+		}
+	</script>
+</html>
